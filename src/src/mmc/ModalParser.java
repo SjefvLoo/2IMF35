@@ -27,7 +27,7 @@ public class ModalParser {
     {
         this.formula = formula;
 
-        this.formula_first_set = new HashSet<Character>();
+        this.formula_first_set = new HashSet<>();
         this.formula_first_set.addAll(true_literal_first_set);
         this.formula_first_set.addAll(false_literal_first_set);
         this.formula_first_set.addAll(recursion_variable_first_set);
@@ -166,14 +166,14 @@ public class ModalParser {
     }
 
     private String parseActionName() throws ParseException {
-        String n = "";
+        StringBuilder n = new StringBuilder();
         char c;
         while(action_name_first_set.contains((c = getChar())))
         {
-            n += c;
+            n.append(c);
             i++;
         }
-        return n;
+        return n.toString();
     }
 
     private Formula parseTrueLiteral() throws ParseException {
@@ -233,18 +233,18 @@ public class ModalParser {
         return null;
     }
 
-    private AndOperator parseLogicAndOperator() throws ParseException
+    private Operator parseLogicAndOperator() throws ParseException
     {
         expect("&&");
         skipWhiteSpace();
-        return new AndOperator();
+        return Operator.AND_OP;
     }
 
-    private OrOperator parseLogicOrOperator() throws ParseException
+    private Operator parseLogicOrOperator() throws ParseException
     {
         expect("||");
         skipWhiteSpace();
-        return new OrOperator();
+        return Operator.OR_OP;
     }
 
     private void expect(String e) throws ParseException

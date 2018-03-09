@@ -1,9 +1,7 @@
 package mmc;
 
-public class Formula {
+import java.util.Set;
 
-    public static Formula Parse(String formula)
-    {
-        return null;
-    }
+public abstract class Formula {
+    //public abstract Set<Object> eval();
 }
