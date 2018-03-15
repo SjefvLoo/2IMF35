@@ -1,8 +1,32 @@
 package mmc.modal.visitors;
 
 import mmc.modal.formulas.*;
+import mmc.models.Lts;
+import mmc.models.State;
 
-public class TrivialFormulaVisitor implements FormulaVisitor  {
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+
+public class TrivialFormulaVisitor implements FormulaVisitor {
+    private final Map<Formula, Set<State>> result;
+    private final Lts lts;
+
+    public TrivialFormulaVisitor(Lts lts){
+        this.result = new HashMap<>();
+        Objects.requireNonNull(lts);
+        this.lts = lts;
+    }
+
+    private Set<State> getFormulaResult(Formula f) {
+        if (result.get(f) == null) {
+            f.accept(this);
+        }
+        return result.get(f);
+    }
+
+
     @Override
     public void visit(Formula formula) {
         System.out.println("trivial fomula");
@@ -66,5 +90,14 @@ public class TrivialFormulaVisitor implements FormulaVisitor  {
     public void visit(RecursionVariable formula) {
         System.out.println("trivial recursion");
         throw new UnsupportedOperationException("Not yet implemented!");
+    }
+
+    @Override
+    public Set<State> calculate(Formula formula) {
+        return getFormulaResult(formula);
+    }
+
+    public void clear() {
+        result.clear();
     }
 }

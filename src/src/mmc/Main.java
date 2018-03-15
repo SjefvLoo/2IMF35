@@ -7,11 +7,13 @@ import mmc.modal.formulas.Formula;
 import mmc.modal.ModalParser;
 import mmc.modal.ParseException;
 import mmc.models.Lts;
+import mmc.models.State;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Set;
 
 public class Main {
 
@@ -34,9 +36,10 @@ public class Main {
             ModalParser mp = new ModalParser(modalcontent);
             Formula f = mp.parse();
 
-            FormulaVisitor tfv = new TrivialFormulaVisitor();
+            FormulaVisitor tfv = new TrivialFormulaVisitor(lts);
             try {
-                f.accept(tfv);
+                Set<State> result = tfv.calculate(f);
+                System.out.println(result);
             } catch (UnsupportedOperationException e) {
                 System.out.println(f.getClass());
             }

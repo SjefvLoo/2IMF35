@@ -1,6 +1,9 @@
 package mmc.modal.visitors;
 
 import mmc.modal.formulas.*;
+import mmc.models.State;
+
+import java.util.Set;
 
 public class EmersonLeiFormulaVisitor implements FormulaVisitor {
     @Override
@@ -66,5 +69,10 @@ public class EmersonLeiFormulaVisitor implements FormulaVisitor {
     public void visit(RecursionVariable formula) {
         System.out.println("emerson lei recursion");
         throw new UnsupportedOperationException("Not yet implemented!");
+    }
+
+    @Override
+    public Set<State> calculate(Formula formula) {
+        return null;
     }
 }
