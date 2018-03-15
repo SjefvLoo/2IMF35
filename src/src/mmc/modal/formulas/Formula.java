@@ -1,5 +1,7 @@
 package mmc.modal.formulas;
 
-public abstract class Formula {
-    //public abstract Set<Object> eval();
+import mmc.modal.visitors.FormulaVisitor;
+
+public interface Formula {
+    void accept(FormulaVisitor visitor);
 }

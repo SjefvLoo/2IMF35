@@ -1,11 +1,18 @@
 package mmc.modal.formulas;
 
-public class RecursionVariable extends Formula {
+import mmc.modal.visitors.FormulaVisitor;
+
+public class RecursionVariable implements Formula {
     protected char n;
 
     public RecursionVariable(char n)
     {
         this.n = n;
+    }
+
+    @Override
+    public void accept(FormulaVisitor visitor) {
+        visitor.visit(this);
     }
 
     @Override

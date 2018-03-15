@@ -1,6 +1,8 @@
 package mmc;
 
 import mmc.aldebaran.LtsBuilder;
+import mmc.modal.visitors.FormulaVisitor;
+import mmc.modal.visitors.TrivialFormulaVisitor;
 import mmc.modal.formulas.Formula;
 import mmc.modal.ModalParser;
 import mmc.modal.ParseException;
@@ -16,7 +18,7 @@ public class Main {
     public static void main(String[] args) throws ParseException {
         if(args.length < 2)
         {
-            System.out.println("2 arguments required: [lts file] [modal formula file]");
+            System.err.println("2 arguments required: [lts file] [modal formula file]");
             System.exit(1);
             return;
         }
@@ -32,11 +34,17 @@ public class Main {
             ModalParser mp = new ModalParser(modalcontent);
             Formula f = mp.parse();
 
+            FormulaVisitor tfv = new TrivialFormulaVisitor();
+            try {
+                f.accept(tfv);
+            } catch (UnsupportedOperationException e) {
+                System.out.println(f.getClass());
+            }
 
             System.out.println(lts);
             System.out.println(f);
         } catch (IOException e) {
-            System.out.println("Unable to read input files");
+            System.err.println("Unable to read input files");
             System.exit(2);
             return;
         }

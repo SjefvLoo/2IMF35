@@ -1,6 +1,13 @@
 package mmc.modal.formulas;
 
-public class LiteralFalse extends Formula {
+import mmc.modal.visitors.FormulaVisitor;
+
+public class LiteralFalse implements Formula {
+    @Override
+    public void accept(FormulaVisitor visitor) {
+        visitor.visit(this);
+    }
+
     @Override
     public String toString() {
         return "false";

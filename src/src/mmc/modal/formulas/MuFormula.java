@@ -1,6 +1,8 @@
 package mmc.modal.formulas;
 
-public class MuFormula extends Formula {
+import mmc.modal.visitors.FormulaVisitor;
+
+public class MuFormula implements Formula {
     protected RecursionVariable r;
     protected Formula f;
 
@@ -8,6 +10,11 @@ public class MuFormula extends Formula {
     {
         this.r = r;
         this.f = f;
+    }
+
+    @Override
+    public void accept(FormulaVisitor visitor) {
+        visitor.visit(this);
     }
 
     @Override

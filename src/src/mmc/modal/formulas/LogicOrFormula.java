@@ -1,6 +1,13 @@
 package mmc.modal.formulas;
 
-public class LogicOrFormula extends LogicFormula{
+import mmc.modal.visitors.FormulaVisitor;
+
+public class LogicOrFormula extends LogicFormula implements Formula {
+    @Override
+    public void accept(FormulaVisitor visitor) {
+        visitor.visit(this);
+    }
+
     @Override
     protected String getSymbol() {
         return "||";

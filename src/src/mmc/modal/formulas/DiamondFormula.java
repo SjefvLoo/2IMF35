@@ -1,6 +1,8 @@
 package mmc.modal.formulas;
 
-public class DiamondFormula extends Formula {
+import mmc.modal.visitors.FormulaVisitor;
+
+public class DiamondFormula implements Formula {
     protected String actionname;
     protected Formula f;
 
@@ -8,6 +10,11 @@ public class DiamondFormula extends Formula {
     {
         this.actionname = actionname;
         this.f = f;
+    }
+
+    @Override
+    public void accept(FormulaVisitor visitor) {
+        visitor.visit(this);
     }
 
     @Override

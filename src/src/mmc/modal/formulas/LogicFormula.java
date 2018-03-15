@@ -1,6 +1,8 @@
 package mmc.modal.formulas;
 
-public abstract class LogicFormula extends Formula {
+import mmc.modal.visitors.FormulaVisitor;
+
+public abstract class LogicFormula implements Formula {
     protected Formula l,r;
 
     public Formula getL() {
@@ -20,6 +22,11 @@ public abstract class LogicFormula extends Formula {
     }
 
     protected abstract String getSymbol();
+
+    @Override
+    public void accept(FormulaVisitor visitor) {
+        visitor.visit(this);
+    }
 
     @Override
     public String toString() {
