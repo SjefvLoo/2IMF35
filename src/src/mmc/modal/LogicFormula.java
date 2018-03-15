@@ -10,4 +10,9 @@ public class LogicFormula extends Formula {
         this.r = r;
         this.o = o;
     }
+
+    @Override
+    public String toString() {
+        return String.format("(%s %s %s)", this.l, this.o.getSymbol(), this.r);
+    }
 }

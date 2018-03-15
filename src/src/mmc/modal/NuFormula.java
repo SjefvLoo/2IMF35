@@ -9,4 +9,9 @@ public class NuFormula extends Formula {
         this.r = r;
         this.f = f;
     }
+
+    @Override
+    public String toString() {
+        return String.format("nu %s.%s", this.r, this.f);
+    }
 }

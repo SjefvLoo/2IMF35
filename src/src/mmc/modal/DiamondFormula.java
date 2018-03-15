@@ -9,4 +9,9 @@ public class DiamondFormula extends Formula {
         this.actionname = actionname;
         this.f = f;
     }
+
+    @Override
+    public String toString() {
+        return String.format("<%s>%s", this.actionname, this.f);
+    }
 }

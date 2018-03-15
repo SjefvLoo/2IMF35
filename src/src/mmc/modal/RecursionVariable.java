@@ -7,4 +7,9 @@ public class RecursionVariable extends Formula {
     {
         this.n = n;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(this.n);
+    }
 }
