@@ -1,7 +1,5 @@
 package mmc.modal.formulas;
 
-import mmc.modal.RecursionVariable;
-
 public class MuFormula extends Formula {
     protected RecursionVariable r;
     protected Formula f;
