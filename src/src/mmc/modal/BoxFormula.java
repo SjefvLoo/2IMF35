@@ -1,4 +1,4 @@
-package mmc;
+package mmc.modal;
 
 public class BoxFormula extends Formula {
     protected String actionname;

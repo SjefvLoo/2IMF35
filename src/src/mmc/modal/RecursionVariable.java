@@ -1,4 +1,4 @@
-package mmc;
+package mmc.modal;
 
 public class RecursionVariable extends Formula {
     protected char n;

@@ -1,4 +1,4 @@
-package mmc;
+package mmc.modal;
 
 public class Operator {
     public static final Operator AND_OP = new Operator();

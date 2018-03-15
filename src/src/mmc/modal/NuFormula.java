@@ -1,4 +1,4 @@
-package mmc;
+package mmc.modal;
 
 public class NuFormula extends Formula {
     protected RecursionVariable r;

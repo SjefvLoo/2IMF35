@@ -1,4 +1,4 @@
-package mmc;
+package mmc.modal;
 
 import java.util.Arrays;
 import java.util.HashSet;

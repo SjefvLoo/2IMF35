@@ -1,4 +1,4 @@
-package mmc;
+package mmc.modal;
 
 public class DiamondFormula extends Formula {
     protected String actionname;

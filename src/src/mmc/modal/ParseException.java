@@ -1,4 +1,4 @@
-package mmc;
+package mmc.modal;
 
 public class ParseException extends Exception {
     public ParseException(String message, int index)

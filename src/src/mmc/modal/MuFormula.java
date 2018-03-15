@@ -1,4 +1,4 @@
-package mmc;
+package mmc.modal;
 
 public class MuFormula extends Formula {
     protected RecursionVariable r;

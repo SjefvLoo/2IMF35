@@ -1,6 +1,4 @@
-package mmc;
-
-import java.util.Set;
+package mmc.modal;
 
 public abstract class Formula {
     //public abstract Set<Object> eval();

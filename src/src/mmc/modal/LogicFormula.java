@@ -1,4 +1,4 @@
-package mmc;
+package mmc.modal;
 
 public class LogicFormula extends Formula {
     protected Formula l,r;
