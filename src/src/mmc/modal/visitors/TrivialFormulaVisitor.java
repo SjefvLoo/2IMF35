@@ -53,20 +53,21 @@ public class TrivialFormulaVisitor implements FormulaVisitor {
 
     @Override
     public void visit(LiteralFalse formula) {
-        System.out.println("trivial false");
         storeResult(formula, new HashSet<>());
     }
 
     @Override
     public void visit(LiteralTrue formula) {
-        System.out.println("trivial true");
         storeResult(formula, this.states);
     }
 
     @Override
     public void visit(LogicAndFormula formula) {
-        System.out.println("trivial and");
-        throw new UnsupportedOperationException("Not yet implemented!");
+        Set<State> leftResult = getFormulaResult(formula.getL());
+        Set<State> rightResult = getFormulaResult(formula.getR());
+        HashSet<State> result = new HashSet<>(leftResult);
+        result.retainAll(rightResult);
+        storeResult(formula, result);
     }
 
     @Override
@@ -77,8 +78,11 @@ public class TrivialFormulaVisitor implements FormulaVisitor {
 
     @Override
     public void visit(LogicOrFormula formula) {
-        System.out.println("trivial or");
-        throw new UnsupportedOperationException("Not yet implemented!");
+        Set<State> leftResult = getFormulaResult(formula.getL());
+        Set<State> rightResult = getFormulaResult(formula.getR());
+        HashSet<State> result = new HashSet<>(leftResult);
+        result.addAll(rightResult);
+        storeResult(formula, result);
     }
 
     @Override

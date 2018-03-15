@@ -62,7 +62,7 @@ public class State {
     public String toString() {
         return "State{" +
             "number=" + this.number +
-            ", transitions=" + this.simpleTransitions +
+            //", transitions=" + this.simpleTransitions +
             '}';
     }
 }

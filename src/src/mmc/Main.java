@@ -38,14 +38,12 @@ public class Main {
 
             FormulaVisitor tfv = new TrivialFormulaVisitor(lts);
             try {
+                System.out.println("Result for \"" + modalcontent + "\": ");
                 Set<State> result = tfv.calculate(f);
                 System.out.println(result);
             } catch (UnsupportedOperationException e) {
                 System.out.println(f.getClass());
             }
-
-            System.out.println(lts);
-            System.out.println(f);
         } catch (IOException e) {
             System.err.println("Unable to read input files");
             System.exit(2);

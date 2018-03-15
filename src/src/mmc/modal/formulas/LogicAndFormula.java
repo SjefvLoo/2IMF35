@@ -10,6 +10,6 @@ public class LogicAndFormula extends LogicFormula implements Formula {
 
     @Override
     protected String getSymbol() {
-        return "||";
+        return "&&";
     }
 }
