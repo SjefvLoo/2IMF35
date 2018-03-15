@@ -4,26 +4,33 @@ import mmc.modal.formulas.*;
 import mmc.models.Lts;
 import mmc.models.State;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class TrivialFormulaVisitor implements FormulaVisitor {
-    private final Map<Formula, Set<State>> result;
+    private final Map<Formula, Set<State>> results;
     private final Lts lts;
+    private final Set<State> states;
 
     public TrivialFormulaVisitor(Lts lts){
-        this.result = new HashMap<>();
+        this.results = new HashMap<>();
         Objects.requireNonNull(lts);
+        this.states = new HashSet<>(Arrays.asList(lts.getStates()));
         this.lts = lts;
     }
 
     private Set<State> getFormulaResult(Formula f) {
-        if (result.get(f) == null) {
+        if (results.get(f) == null) {
             f.accept(this);
         }
-        return result.get(f);
+        return results.get(f);
+    }
+
+    private void storeResult(Formula formula, Set<State> result)
+    {
+        if(results.put(formula, result) != null)
+        {
+            throw new IllegalStateException(formula.toString() + " already computed.");
+        }
     }
 
 
@@ -47,13 +54,13 @@ public class TrivialFormulaVisitor implements FormulaVisitor {
     @Override
     public void visit(LiteralFalse formula) {
         System.out.println("trivial false");
-        throw new UnsupportedOperationException("Not yet implemented!");
+        storeResult(formula, new HashSet<>());
     }
 
     @Override
     public void visit(LiteralTrue formula) {
         System.out.println("trivial true");
-        throw new UnsupportedOperationException("Not yet implemented!");
+        storeResult(formula, this.states);
     }
 
     @Override
@@ -98,6 +105,6 @@ public class TrivialFormulaVisitor implements FormulaVisitor {
     }
 
     public void clear() {
-        result.clear();
+        results.clear();
     }
 }

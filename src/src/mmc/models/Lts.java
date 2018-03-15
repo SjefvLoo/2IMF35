@@ -41,6 +41,10 @@ public class Lts {
         return state;
     }
 
+    public State[] getStates(){
+        return this.states;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
