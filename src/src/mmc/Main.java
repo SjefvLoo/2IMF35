@@ -1,7 +1,7 @@
 package mmc;
 
 import mmc.aldebaran.LtsBuilder;
-import mmc.modal.formula.Formula;
+import mmc.modal.formulas.Formula;
 import mmc.modal.ModalParser;
 import mmc.modal.ParseException;
 import mmc.models.Lts;

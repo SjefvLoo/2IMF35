@@ -1,6 +1,6 @@
-package mmc.modal.formula;
+package mmc.modal.formulas;
 
-public class LogicAndFormula extends LogicFormula{
+public class LogicOrFormula extends LogicFormula{
     @Override
     protected String getSymbol() {
         return "||";

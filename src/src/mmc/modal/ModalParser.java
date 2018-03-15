@@ -1,6 +1,6 @@
 package mmc.modal;
 
-import mmc.modal.formula.*;
+import mmc.modal.formulas.*;
 
 import java.util.Arrays;
 import java.util.HashSet;

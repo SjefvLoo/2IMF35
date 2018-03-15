@@ -1,4 +1,4 @@
-package mmc.modal.formula;
+package mmc.modal.formulas;
 
 public class LiteralTrue extends Formula {
     @Override

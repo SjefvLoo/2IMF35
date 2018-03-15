@@ -1,4 +1,4 @@
-package mmc.modal.formula;
+package mmc.modal.formulas;
 
 import mmc.modal.RecursionVariable;
 

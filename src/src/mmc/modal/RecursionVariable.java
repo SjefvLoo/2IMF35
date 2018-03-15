@@ -1,6 +1,6 @@
 package mmc.modal;
 
-import mmc.modal.formula.Formula;
+import mmc.modal.formulas.Formula;
 
 public class RecursionVariable extends Formula {
     protected char n;
