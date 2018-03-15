@@ -1,15 +1,11 @@
 package mmc.modal.formulas;
 
 import mmc.modal.visitors.FormulaVisitor;
+import mmc.models.Label;
 
-public class DiamondFormula implements Formula {
-    protected String actionname;
-    protected Formula f;
-
-    public DiamondFormula(String actionname, Formula f)
-    {
-        this.actionname = actionname;
-        this.f = f;
+public class DiamondFormula extends ModalityFormula implements Formula {
+    public DiamondFormula(Label action, Formula formula) {
+        super(action, formula);
     }
 
     @Override
@@ -19,6 +15,6 @@ public class DiamondFormula implements Formula {
 
     @Override
     public String toString() {
-        return String.format("<%s>%s", this.actionname, this.f);
+        return String.format("<%s>%s", this.getAction(), this.getFormula());
     }
 }

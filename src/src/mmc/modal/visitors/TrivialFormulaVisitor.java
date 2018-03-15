@@ -1,10 +1,12 @@
 package mmc.modal.visitors;
 
 import mmc.modal.formulas.*;
+import mmc.models.Label;
 import mmc.models.Lts;
 import mmc.models.State;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TrivialFormulaVisitor implements FormulaVisitor {
     private final Map<Formula, Set<State>> results;
@@ -38,14 +40,26 @@ public class TrivialFormulaVisitor implements FormulaVisitor {
 
     @Override
     public void visit(BoxFormula formula) {
-        System.out.println("trivial box");
-        throw new UnsupportedOperationException("Not yet implemented!");
+        Set<State> formulaResult = this.getFormulaResult(formula.getFormula());
+        Label action = formula.getAction();
+        Set<State> result = Arrays.stream(this.lts.getStates())
+            .filter(startState -> startState.getTransitionLabels().contains(action) &&
+                startState.transition(action).stream()
+                    .allMatch(formulaResult::contains))
+            .collect(Collectors.toSet());
+        storeResult(formula, result);
     }
 
     @Override
     public void visit(DiamondFormula formula) {
-        System.out.println("trivial diamond");
-        throw new UnsupportedOperationException("Not yet implemented!");
+        Set<State> formulaResult = this.getFormulaResult(formula.getFormula());
+        Label action = formula.getAction();
+        Set<State> result = Arrays.stream(this.lts.getStates())
+            .filter(startState -> startState.getTransitionLabels().contains(action) &&
+                startState.transition(action).stream()
+                    .anyMatch(formulaResult::contains))
+            .collect(Collectors.toSet());
+        storeResult(formula, result);
     }
 
     @Override

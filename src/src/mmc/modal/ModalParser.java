@@ -1,6 +1,7 @@
 package mmc.modal;
 
 import mmc.modal.formulas.*;
+import mmc.models.Label;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -144,7 +145,7 @@ public class ModalParser {
         } else {
             throw new ParseException("formula expected.",i);
         }
-        return new DiamondFormula(action, f);
+        return new DiamondFormula(new Label(action), f);
     }
 
     private Formula parseBoxFormula() throws ParseException {
@@ -164,7 +165,7 @@ public class ModalParser {
         } else {
             throw new ParseException("formula expected.",i);
         }
-        return new BoxFormula(action, f);
+        return new BoxFormula(new Label(action), f);
     }
 
     private String parseActionName() throws ParseException {
