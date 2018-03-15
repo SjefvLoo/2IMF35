@@ -1,5 +1,8 @@
 package mmc.modal;
 
+import mmc.modal.formula.*;
+
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -140,7 +143,7 @@ public class ModalParser {
         if(formula_first_set.contains(getChar())){
             f = parseFormula();
         } else {
-            throw new ParseException("Formula expected.",i);
+            throw new ParseException("formula expected.",i);
         }
         return new DiamondFormula(action, f);
     }
@@ -160,7 +163,7 @@ public class ModalParser {
         if(formula_first_set.contains(getChar())){
             f = parseFormula();
         } else {
-            throw new ParseException("Formula expected.",i);
+            throw new ParseException("formula expected.",i);
         }
         return new BoxFormula(action, f);
     }
@@ -198,29 +201,31 @@ public class ModalParser {
         expect("(");
         Formula f;
         Formula g;
-        Operator o;
+        LogicFormula l;
         skipWhiteSpace();
         if(formula_first_set.contains(getChar())) {
             f = parseFormula();
         } else {
-            throw new ParseException("Formula expected.",i);
+            throw new ParseException("formula expected.",i);
         }
         if(operator_first_set.contains(getChar())) {
-            o = parseOperator();
+            l = parseOperator();
         } else {
             throw new ParseException("Operator expected.", i);
         }
         if(formula_first_set.contains(getChar())) {
             g = parseFormula();
         } else {
-            throw new ParseException("Formula expected.",i);
+            throw new ParseException("formula expected.",i);
         }
         expect(")");
         skipWhiteSpace();
-        return new LogicFormula(f,g,o);
+        l.setL(f);
+        l.setR(g);
+        return l;
     }
 
-    private Operator parseOperator() throws ParseException
+    private LogicFormula parseOperator() throws ParseException
     {
         if(and_operator_first_set.contains(getChar()))
         {
@@ -233,18 +238,18 @@ public class ModalParser {
         return null;
     }
 
-    private Operator parseLogicAndOperator() throws ParseException
+    private LogicFormula parseLogicAndOperator() throws ParseException
     {
         expect("&&");
         skipWhiteSpace();
-        return Operator.AND_OP;
+        return new LogicAndFormula();
     }
 
-    private Operator parseLogicOrOperator() throws ParseException
+    private LogicFormula parseLogicOrOperator() throws ParseException
     {
         expect("||");
         skipWhiteSpace();
-        return Operator.OR_OP;
+        return new LogicOrFormula();
     }
 
     private void expect(String e) throws ParseException
