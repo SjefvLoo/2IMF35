@@ -12,6 +12,14 @@ public class MuFormula implements Formula {
         this.f = f;
     }
 
+    public RecursionVariable getR() {
+        return r;
+    }
+
+    public Formula getF() {
+        return f;
+    }
+
     @Override
     public void accept(FormulaVisitor visitor) {
         visitor.visit(this);

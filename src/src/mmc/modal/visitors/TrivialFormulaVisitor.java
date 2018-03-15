@@ -8,6 +8,7 @@ import java.util.*;
 
 public class TrivialFormulaVisitor implements FormulaVisitor {
     private final Map<Formula, Set<State>> results;
+    private final Map<RecursionVariable, Set<State>> fixedPointResults;
     private final Lts lts;
     private final Set<State> states;
 
@@ -16,21 +17,17 @@ public class TrivialFormulaVisitor implements FormulaVisitor {
         Objects.requireNonNull(lts);
         this.states = new HashSet<>(Arrays.asList(lts.getStates()));
         this.lts = lts;
+        this.fixedPointResults = new HashMap<>();
     }
 
     private Set<State> getFormulaResult(Formula f) {
-        if (results.get(f) == null) {
-            f.accept(this);
-        }
+        f.accept(this);
         return results.get(f);
     }
 
     private void storeResult(Formula formula, Set<State> result)
     {
-        if(results.put(formula, result) != null)
-        {
-            throw new IllegalStateException(formula.toString() + " already computed.");
-        }
+        results.put(formula, result);
     }
 
 
@@ -58,7 +55,7 @@ public class TrivialFormulaVisitor implements FormulaVisitor {
 
     @Override
     public void visit(LiteralTrue formula) {
-        storeResult(formula, this.states);
+        storeResult(formula, states);
     }
 
     @Override
@@ -87,20 +84,37 @@ public class TrivialFormulaVisitor implements FormulaVisitor {
 
     @Override
     public void visit(MuFormula formula) {
-        System.out.println("trivial mu");
-        throw new UnsupportedOperationException("Not yet implemented!");
+        RecursionVariable r = formula.getR();
+        Formula subformula = formula.getF();
+        fixedPointResults.put(r, new HashSet<>());
+        storeResult(formula, fixedPoint(subformula, r));
     }
 
     @Override
     public void visit(NuFormula formula) {
-        System.out.println("trivial nu");
-        throw new UnsupportedOperationException("Not yet implemented!");
+        RecursionVariable r = formula.getR();
+        Formula subformula = formula.getF();
+        fixedPointResults.put(r, new HashSet<>(states));
+        storeResult(formula, fixedPoint(subformula, r));
+    }
+
+    private Set<State> fixedPoint(Formula subformula, RecursionVariable r)
+    {
+        int i = 0;
+        Boolean equalibrium;
+        do {
+            subformula.accept(this);
+            Set<State> result = results.get(subformula);
+            Set<State> previousresult = fixedPointResults.put(r, result);
+            equalibrium = (result.containsAll(previousresult) && result.size() == previousresult.size());
+        } while(!equalibrium);
+
+        return fixedPointResults.get(r);
     }
 
     @Override
     public void visit(RecursionVariable formula) {
-        System.out.println("trivial recursion");
-        throw new UnsupportedOperationException("Not yet implemented!");
+        this.storeResult(formula, fixedPointResults.get(formula));
     }
 
     @Override
