@@ -2,11 +2,8 @@ package mmc.modal.visitors;
 
 import mmc.modal.formulas.*;
 import mmc.models.Lts;
-import mmc.models.State;
 
 import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
 
 public class EmersonLeiAlgorithm extends NaiveAlgorithm implements FormulaCalculator, FormulaVisitor {
     private enum Bound {
