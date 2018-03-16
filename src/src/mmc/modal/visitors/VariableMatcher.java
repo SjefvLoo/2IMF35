@@ -59,6 +59,7 @@ public class VariableMatcher extends RecursiveVisitor implements FormulaVisitor 
                 .filter(other -> !this.variable.equals(other))
                 .map(this.free::add);
         this.bounded.addAll(variableMatcher.bounded);
+        this.bounded.remove(formula.getRecursionVariable());
         this.all.addAll(variableMatcher.getAll());
     }
 
@@ -70,6 +71,7 @@ public class VariableMatcher extends RecursiveVisitor implements FormulaVisitor 
                 .filter(other -> !this.variable.equals(other))
                 .map(this.free::add);
         this.bounded.addAll(variableMatcher.bounded);
+        this.bounded.remove(formula.getRecursionVariable());
         this.all.addAll(variableMatcher.getAll());
     }
 
