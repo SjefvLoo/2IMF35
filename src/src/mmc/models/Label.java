@@ -29,8 +29,6 @@ public class Label {
 
     @Override
     public String toString() {
-        return "Label{" +
-            "label='" + this.text + '\'' +
-            '}';
+        return this.text;
     }
 }
