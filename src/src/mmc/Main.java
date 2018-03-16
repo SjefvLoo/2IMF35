@@ -46,7 +46,7 @@ public class Main {
 
         System.out.println(formula);
         System.out.println(result);
-        System.out.println(result.contains(0));
+        System.out.println("Verdict: " + String.valueOf(result.contains(0)));
     }
 
     private static Lts loadAldebaranLts(String filename) {
