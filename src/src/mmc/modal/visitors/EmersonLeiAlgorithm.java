@@ -7,10 +7,10 @@ import mmc.models.State;
 import java.util.Objects;
 import java.util.Set;
 
-public class EmersonLeiFormulaVisitor implements FormulaVisitor {
+public class EmersonLeiAlgorithm implements FormulaCalculator, FormulaVisitor {
     private final Lts lts;
 
-    public EmersonLeiFormulaVisitor(Lts lts) {
+    public EmersonLeiAlgorithm(Lts lts) {
         Objects.requireNonNull(lts);
         this.lts = lts;
     }

@@ -1,9 +1,6 @@
 package mmc.modal.visitors;
 
 import mmc.modal.formulas.*;
-import mmc.models.State;
-
-import java.util.Set;
 
 public interface FormulaVisitor {
     void visit(BoxFormula formula);
@@ -15,6 +12,4 @@ public interface FormulaVisitor {
     void visit(MuFormula formula);
     void visit(NuFormula formula);
     void visit(RecursionVariable formula);
-
-    Set<State> calculate(Formula formula);
 }

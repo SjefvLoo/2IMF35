@@ -8,13 +8,13 @@ import mmc.models.State;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TrivialFormulaVisitor implements FormulaVisitor {
+public class NaiveAlgorithm implements FormulaCalculator, FormulaVisitor {
     private final Lts lts;
     private final Set<State> states;
     private final Map<Formula, Set<State>> results;
     private final Map<RecursionVariable, Set<State>> fixedPointResults;
 
-    public TrivialFormulaVisitor(Lts lts) {
+    public NaiveAlgorithm(Lts lts) {
         Objects.requireNonNull(lts);
         this.lts = lts;
         this.states = new HashSet<>(Arrays.asList(lts.getStates()));

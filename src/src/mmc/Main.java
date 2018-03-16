@@ -2,9 +2,9 @@ package mmc;
 
 import mmc.aldebaran.LtsBuilder;
 import mmc.aldebaran.SyntaxException;
-import mmc.modal.visitors.EmersonLeiFormulaVisitor;
-import mmc.modal.visitors.FormulaVisitor;
-import mmc.modal.visitors.TrivialFormulaVisitor;
+import mmc.modal.visitors.EmersonLeiAlgorithm;
+import mmc.modal.visitors.FormulaCalculator;
+import mmc.modal.visitors.NaiveAlgorithm;
 import mmc.modal.formulas.Formula;
 import mmc.modal.ModalParser;
 import mmc.modal.ParseException;
@@ -26,20 +26,20 @@ public class Main {
         }
         Lts lts = loadAldebaranLts(args[1]);
         Formula formula = loadFormula(args[2]);
-        FormulaVisitor formulaVisitor = null;
+        FormulaCalculator formulaCalculator = null;
         switch (args[0].toLowerCase()) {
             case "trivial":
-                formulaVisitor = new TrivialFormulaVisitor(lts);
+                formulaCalculator = new NaiveAlgorithm(lts);
                 break;
             case "improved":
-                formulaVisitor = new EmersonLeiFormulaVisitor(lts);
+                formulaCalculator = new EmersonLeiAlgorithm(lts);
                 break;
             default:
                 help();
                 return;
         }
 
-        Set<State> states = formulaVisitor.calculate(formula);
+        Set<State> states = formulaCalculator.calculate(formula);
         Set<Integer> result = states.stream()
                 .map(State::getNumber)
                 .collect(Collectors.toSet());
