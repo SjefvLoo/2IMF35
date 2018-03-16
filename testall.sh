@@ -19,7 +19,7 @@ run() {
     fi
 }
 
-for algo in 'trivial' 'improved'; do
+for algo in 'naive' 'emersonlei'; do
     for dir in ./testcases/boolean \
             ./testcases/modal_operators \
             ./testcases/fixpoints_only \

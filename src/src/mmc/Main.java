@@ -28,10 +28,10 @@ public class Main {
         Formula formula = loadFormula(args[2]);
         FormulaCalculator formulaCalculator = null;
         switch (args[0].toLowerCase()) {
-            case "trivial":
+            case "naive":
                 formulaCalculator = new NaiveAlgorithm(lts);
                 break;
-            case "improved":
+            case "emersonlei":
                 formulaCalculator = new EmersonLeiAlgorithm(lts);
                 break;
             default:
@@ -85,7 +85,7 @@ public class Main {
     }
 
     private static void help() {
-        System.err.println("3 arguments required: (trivial | improved) <lts file> <modal formula file>");
+        System.err.println("3 arguments required: (naive | emersonlei) <lts file> <modal formula file>");
         System.exit(1);
     }
 }
