@@ -1,0 +1,9 @@
+nu X. (
+    ([i]X && [playing]false) && 
+    ([wisdom]false && [ask]nu Y. (
+        ([i]Y && [ask]false) && ([playing]false && [wisdom]nu Z. (
+            ([i]Z && [playing]true) && ([wisdom]false && [ask]false)
+            ) )
+        )
+    )
+)
