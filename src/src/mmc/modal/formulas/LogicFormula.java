@@ -20,6 +20,21 @@ public abstract class LogicFormula implements Formula {
     }
 
     @Override
+    public int getNestingDepth() {
+        return Math.max(this.left.getNestingDepth(), this.right.getNestingDepth());
+    }
+
+    @Override
+    public int getAlternationDepth() {
+        return Math.max(this.left.getAlternationDepth(), this.right.getAlternationDepth());
+    }
+
+    @Override
+    public int getDependentAlternationDepth() {
+        return Math.max(this.left.getDependentAlternationDepth(), this.right.getAlternationDepth());
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
