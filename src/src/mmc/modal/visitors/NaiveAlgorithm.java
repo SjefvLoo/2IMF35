@@ -102,7 +102,7 @@ public class NaiveAlgorithm implements FormulaCalculator, FormulaVisitor {
         this.putFormulaResult(formula, this.fixedPoint(subFormula, recursionVariable));
     }
 
-    private Set<State> fixedPoint(Formula subFormula, RecursionVariable recursionVariable) {
+    public Set<State> fixedPoint(Formula subFormula, RecursionVariable recursionVariable) {
         int i = 0;
         Boolean equilibrium;
         do {
