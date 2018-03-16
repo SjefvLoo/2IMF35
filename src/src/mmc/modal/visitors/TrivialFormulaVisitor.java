@@ -74,8 +74,8 @@ public class TrivialFormulaVisitor implements FormulaVisitor {
 
     @Override
     public void visit(LogicAndFormula formula) {
-        Set<State> leftResult = getFormulaResult(formula.getL());
-        Set<State> rightResult = getFormulaResult(formula.getR());
+        Set<State> leftResult = getFormulaResult(formula.getLeft());
+        Set<State> rightResult = getFormulaResult(formula.getRight());
         HashSet<State> result = new HashSet<>(leftResult);
         result.retainAll(rightResult);
         storeResult(formula, result);
@@ -89,8 +89,8 @@ public class TrivialFormulaVisitor implements FormulaVisitor {
 
     @Override
     public void visit(LogicOrFormula formula) {
-        Set<State> leftResult = getFormulaResult(formula.getL());
-        Set<State> rightResult = getFormulaResult(formula.getR());
+        Set<State> leftResult = getFormulaResult(formula.getLeft());
+        Set<State> rightResult = getFormulaResult(formula.getRight());
         HashSet<State> result = new HashSet<>(leftResult);
         result.addAll(rightResult);
         storeResult(formula, result);

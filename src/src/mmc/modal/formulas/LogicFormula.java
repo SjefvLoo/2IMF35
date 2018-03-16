@@ -1,35 +1,40 @@
 package mmc.modal.formulas;
 
-import mmc.modal.visitors.FormulaVisitor;
+import java.util.Objects;
 
 public abstract class LogicFormula implements Formula {
-    protected Formula l,r;
+    private Formula left;
+    private Formula right;
 
-    public Formula getL() {
-        return l;
+    public Formula getLeft() {
+        return this.left;
     }
 
-    public void setL(Formula l) {
-        this.l = l;
+    public void setLeft(Formula left) {
+        this.left = left;
     }
 
-    public Formula getR() {
-        return r;
+    public Formula getRight() {
+        return this.right;
     }
 
-    public void setR(Formula r) {
-        this.r = r;
-    }
-
-    protected abstract String getSymbol();
-
-    @Override
-    public void accept(FormulaVisitor visitor) {
-        visitor.visit(this);
+    public void setRight(Formula right) {
+        this.right = right;
     }
 
     @Override
-    public String toString() {
-        return String.format("(%s %s %s)", this.l, this.getSymbol(), this.r);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LogicFormula that = (LogicFormula) o;
+        return Objects.equals(this.left, that.left) &&
+                Objects.equals(this.right, that.right);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.left, this.right);
+    }
+
+    public abstract String toString();
 }

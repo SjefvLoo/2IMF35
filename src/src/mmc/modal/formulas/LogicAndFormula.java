@@ -9,7 +9,7 @@ public class LogicAndFormula extends LogicFormula implements Formula {
     }
 
     @Override
-    protected String getSymbol() {
-        return "&&";
+    public String toString() {
+        return String.format("(%s && %s)", this.getLeft(), this.getRight());
     }
 }

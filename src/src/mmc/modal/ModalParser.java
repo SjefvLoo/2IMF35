@@ -220,8 +220,8 @@ public class ModalParser {
         }
         expect(")");
         skipWhiteSpace();
-        l.setL(f);
-        l.setR(g);
+        l.setLeft(f);
+        l.setRight(g);
         return l;
     }
 
