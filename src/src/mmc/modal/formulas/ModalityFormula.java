@@ -24,6 +24,21 @@ public abstract class ModalityFormula implements Formula {
     }
 
     @Override
+    public int getNestingDepth() {
+        return this.formula.getNestingDepth();
+    }
+
+    @Override
+    public int getAlternationDepth() {
+        return this.formula.getAlternationDepth();
+    }
+
+    @Override
+    public int getDependentAlternationDepth() {
+        return this.formula.getDependentAlternationDepth();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

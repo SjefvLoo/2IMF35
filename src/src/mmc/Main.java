@@ -45,6 +45,9 @@ public class Main {
                 .collect(Collectors.toSet());
 
         System.out.println(formula);
+        System.out.println(String.format("Nesting depth: %s", formula.getNestingDepth()));
+        System.out.println(String.format("Alternation depth: %s", formula.getAlternationDepth()));
+        System.out.println(String.format("Dependent alternation depth: %s", formula.getDependentAlternationDepth()));
         System.out.println(result);
         System.out.println("Verdict: " + String.valueOf(result.contains(0)));
     }

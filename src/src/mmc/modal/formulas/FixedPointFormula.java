@@ -32,6 +32,11 @@ public abstract class FixedPointFormula implements Formula {
     }
 
     @Override
+    public int getNestingDepth() {
+        return 1 + this.formula.getNestingDepth();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
