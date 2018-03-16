@@ -53,6 +53,7 @@ public class VariableMatcher extends RecursiveVisitor implements FormulaVisitor 
 
     @Override
     public void visit(MuFormula formula) {
+        formula.findVariables();
         VariableMatcher variableMatcher = formula.getVariableMatcher();
         variableMatcher.getFree().stream()
                 .filter(other -> !this.variable.equals(other))
@@ -63,6 +64,7 @@ public class VariableMatcher extends RecursiveVisitor implements FormulaVisitor 
 
     @Override
     public void visit(NuFormula formula) {
+        formula.findVariables();
         VariableMatcher variableMatcher = formula.getVariableMatcher();
         variableMatcher.getFree().stream()
                 .filter(other -> !this.variable.equals(other))
