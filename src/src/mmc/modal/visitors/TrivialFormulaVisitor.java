@@ -9,27 +9,17 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class TrivialFormulaVisitor implements FormulaVisitor {
-    private final Map<Formula, Set<State>> results;
-    private final Map<RecursionVariable, Set<State>> fixedPointResults;
     private final Lts lts;
     private final Set<State> states;
+    private final Map<Formula, Set<State>> results;
+    private final Map<RecursionVariable, Set<State>> fixedPointResults;
 
-    public TrivialFormulaVisitor(Lts lts){
-        this.results = new HashMap<>();
+    public TrivialFormulaVisitor(Lts lts) {
         Objects.requireNonNull(lts);
-        this.states = new HashSet<>(Arrays.asList(lts.getStates()));
         this.lts = lts;
+        this.states = new HashSet<>(Arrays.asList(lts.getStates()));
+        this.results = new HashMap<>();
         this.fixedPointResults = new HashMap<>();
-    }
-
-    private Set<State> getFormulaResult(Formula f) {
-        f.accept(this);
-        return results.get(f);
-    }
-
-    private void storeResult(Formula formula, Set<State> result)
-    {
-        results.put(formula, result);
     }
 
     @Override
@@ -41,7 +31,7 @@ public class TrivialFormulaVisitor implements FormulaVisitor {
                 startState.transition(action).stream()
                     .allMatch(formulaResult::contains))
             .collect(Collectors.toSet());
-        storeResult(formula, result);
+        this.putFormulaResult(formula, result);
     }
 
     @Override
@@ -53,78 +43,85 @@ public class TrivialFormulaVisitor implements FormulaVisitor {
                 startState.transition(action).stream()
                     .anyMatch(formulaResult::contains))
             .collect(Collectors.toSet());
-        storeResult(formula, result);
+        this.putFormulaResult(formula, result);
     }
 
     @Override
     public void visit(LiteralFalse formula) {
-        storeResult(formula, new HashSet<>());
+        this.putFormulaResult(formula, new HashSet<>());
     }
 
     @Override
     public void visit(LiteralTrue formula) {
-        storeResult(formula, states);
+        this.putFormulaResult(formula, states);
     }
 
     @Override
     public void visit(LogicAndFormula formula) {
-        Set<State> leftResult = getFormulaResult(formula.getLeft());
-        Set<State> rightResult = getFormulaResult(formula.getRight());
+        Set<State> leftResult = this.getFormulaResult(formula.getLeft());
+        Set<State> rightResult = this.getFormulaResult(formula.getRight());
         HashSet<State> result = new HashSet<>(leftResult);
         result.retainAll(rightResult);
-        storeResult(formula, result);
+        this.putFormulaResult(formula, result);
     }
 
     @Override
     public void visit(LogicOrFormula formula) {
-        Set<State> leftResult = getFormulaResult(formula.getLeft());
-        Set<State> rightResult = getFormulaResult(formula.getRight());
+        Set<State> leftResult = this.getFormulaResult(formula.getLeft());
+        Set<State> rightResult = this.getFormulaResult(formula.getRight());
         HashSet<State> result = new HashSet<>(leftResult);
         result.addAll(rightResult);
-        storeResult(formula, result);
+        this.putFormulaResult(formula, result);
     }
 
     @Override
     public void visit(MuFormula formula) {
-        RecursionVariable r = formula.getRecursionVariable();
-        Formula subformula = formula.getFormula();
-        fixedPointResults.put(r, new HashSet<>());
-        storeResult(formula, fixedPoint(subformula, r));
+        RecursionVariable recursionVariable = formula.getRecursionVariable();
+        Formula subFormula = formula.getFormula();
+        this.fixedPointResults.put(recursionVariable, new HashSet<>());
+        this.putFormulaResult(formula, this.fixedPoint(subFormula, recursionVariable));
     }
 
     @Override
     public void visit(NuFormula formula) {
-        RecursionVariable r = formula.getRecursionVariable();
-        Formula subformula = formula.getFormula();
-        fixedPointResults.put(r, new HashSet<>(states));
-        storeResult(formula, fixedPoint(subformula, r));
+        RecursionVariable recursionVariable = formula.getRecursionVariable();
+        Formula subFormula = formula.getFormula();
+        this.fixedPointResults.put(recursionVariable, new HashSet<>(this.states));
+        this.putFormulaResult(formula, this.fixedPoint(subFormula, recursionVariable));
     }
 
-    private Set<State> fixedPoint(Formula subformula, RecursionVariable r)
-    {
-        int i = 0;
-        Boolean equalibrium;
+    private Set<State> fixedPoint(Formula subFormula, RecursionVariable recursionVariable) {
+        Boolean equilibrium;
         do {
-            subformula.accept(this);
-            Set<State> result = results.get(subformula);
-            Set<State> previousresult = fixedPointResults.put(r, result);
-            equalibrium = (result.containsAll(previousresult) && result.size() == previousresult.size());
-        } while(!equalibrium);
+            subFormula.accept(this);
+            Set<State> result = this.results.get(subFormula);
+            Set<State> previousResult = this.fixedPointResults.put(recursionVariable, result);
+            equilibrium = result.equals(previousResult);
+        } while(!equilibrium);
 
-        return fixedPointResults.get(r);
+        return this.fixedPointResults.get(recursionVariable);
     }
 
     @Override
     public void visit(RecursionVariable formula) {
-        this.storeResult(formula, fixedPointResults.get(formula));
+        this.putFormulaResult(formula, fixedPointResults.get(formula));
     }
 
     @Override
     public Set<State> calculate(Formula formula) {
-        return getFormulaResult(formula);
+        return this.getFormulaResult(formula);
     }
 
     public void clear() {
-        results.clear();
+        this.results.clear();
+    }
+
+    private Set<State> getFormulaResult(Formula formula) {
+        formula.accept(this);
+        return this.results.get(formula);
+    }
+
+    private void putFormulaResult(Formula formula, Set<State> result) {
+        this.results.put(formula, result);
     }
 }
