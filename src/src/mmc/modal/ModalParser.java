@@ -1,6 +1,7 @@
 package mmc.modal;
 
 import mmc.modal.formulas.*;
+import mmc.modal.visitors.FixedPointVisitor;
 import mmc.modal.visitors.ScopeRecursionVariables;
 import mmc.models.Label;
 
@@ -55,7 +56,7 @@ public class ModalParser {
             {
                 throw new ParseException("End of formula expected.", i);
             }
-            scopeRecursionVariables(f);
+            callAllVisitors(f);
             return f;
         }
         else
@@ -64,9 +65,19 @@ public class ModalParser {
         }
     }
 
+    private void callAllVisitors(Formula f) {
+        scopeRecursionVariables(f);
+        fixedPointsVisitor(f);
+    }
+
     private void scopeRecursionVariables(Formula f){
         ScopeRecursionVariables srv = new ScopeRecursionVariables();
         f.accept(srv);
+    }
+
+    private void fixedPointsVisitor(Formula f) {
+        FixedPointVisitor fpv = new FixedPointVisitor();
+        f.accept(fpv);
     }
 
     private Formula parseFormula() throws ParseException {

@@ -8,12 +8,11 @@ import java.util.Set;
 public abstract class FixedPointFormula implements Formula {
     private final RecursionVariable recursionVariable;
     private final Formula formula;
-    private final Set<RecursionVariable> freeVariables;
+    private VariableMatcher variableMatcher;
 
     public FixedPointFormula(RecursionVariable recursionVariable, Formula formula) {
         this.recursionVariable = recursionVariable;
         this.formula = formula;
-        this.freeVariables = VariableMatcher.findFreeVariables(this);
     }
 
     public RecursionVariable getRecursionVariable() {
@@ -24,8 +23,12 @@ public abstract class FixedPointFormula implements Formula {
         return this.formula;
     }
 
-    public Set<RecursionVariable> getFreeVariables() {
-        return this.freeVariables;
+    public VariableMatcher getVariableMatcher() {
+        return this.variableMatcher;
+    }
+
+    public void findVariables() {
+        this.variableMatcher = VariableMatcher.findVariables(this);
     }
 
     @Override
