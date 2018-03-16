@@ -98,16 +98,16 @@ public class TrivialFormulaVisitor implements FormulaVisitor {
 
     @Override
     public void visit(MuFormula formula) {
-        RecursionVariable r = formula.getR();
-        Formula subformula = formula.getF();
+        RecursionVariable r = formula.getRecursionVariable();
+        Formula subformula = formula.getFormula();
         fixedPointResults.put(r, new HashSet<>());
         storeResult(formula, fixedPoint(subformula, r));
     }
 
     @Override
     public void visit(NuFormula formula) {
-        RecursionVariable r = formula.getR();
-        Formula subformula = formula.getF();
+        RecursionVariable r = formula.getRecursionVariable();
+        Formula subformula = formula.getFormula();
         fixedPointResults.put(r, new HashSet<>(states));
         storeResult(formula, fixedPoint(subformula, r));
     }

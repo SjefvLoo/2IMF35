@@ -2,22 +2,9 @@ package mmc.modal.formulas;
 
 import mmc.modal.visitors.FormulaVisitor;
 
-public class NuFormula implements Formula {
-    protected RecursionVariable r;
-    protected Formula f;
-
-    public NuFormula(RecursionVariable r, Formula f)
-    {
-        this.r = r;
-        this.f = f;
-    }
-
-    public RecursionVariable getR() {
-        return r;
-    }
-
-    public Formula getF() {
-        return f;
+public class NuFormula extends FixedPointFormula implements Formula {
+    public NuFormula(RecursionVariable recursionVariable, Formula formula) {
+        super(recursionVariable, formula);
     }
 
     @Override
@@ -27,6 +14,6 @@ public class NuFormula implements Formula {
 
     @Override
     public String toString() {
-        return String.format("nu %s.%s", this.r, this.f);
+        return String.format("nu %s.%s", this.getRecursionVariable(), this.getFormula());
     }
 }
