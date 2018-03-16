@@ -7,11 +7,6 @@ import java.util.Set;
 
 public class EmersonLeiFormulaVisitor implements FormulaVisitor {
     @Override
-    public void visit(Formula formula) {
-        System.out.println("emerson lei fomula");
-    }
-
-    @Override
     public void visit(BoxFormula formula) {
         System.out.println("emerson lei box");
         throw new UnsupportedOperationException("Not yet implemented!");
@@ -38,12 +33,6 @@ public class EmersonLeiFormulaVisitor implements FormulaVisitor {
     @Override
     public void visit(LogicAndFormula formula) {
         System.out.println("emerson lei and");
-        throw new UnsupportedOperationException("Not yet implemented!");
-    }
-
-    @Override
-    public void visit(LogicFormula formula) {
-        System.out.println("emerson lei logic");
         throw new UnsupportedOperationException("Not yet implemented!");
     }
 

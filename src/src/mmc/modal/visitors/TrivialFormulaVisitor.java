@@ -32,12 +32,6 @@ public class TrivialFormulaVisitor implements FormulaVisitor {
         results.put(formula, result);
     }
 
-
-    @Override
-    public void visit(Formula formula) {
-        System.out.println("trivial fomula");
-    }
-
     @Override
     public void visit(BoxFormula formula) {
         Set<State> formulaResult = this.getFormulaResult(formula.getFormula());
@@ -79,12 +73,6 @@ public class TrivialFormulaVisitor implements FormulaVisitor {
         HashSet<State> result = new HashSet<>(leftResult);
         result.retainAll(rightResult);
         storeResult(formula, result);
-    }
-
-    @Override
-    public void visit(LogicFormula formula) {
-        System.out.println("trivial logic");
-        throw new UnsupportedOperationException("Not yet implemented!");
     }
 
     @Override
