@@ -1,6 +1,8 @@
 package mmc;
 
 import mmc.aldebaran.LtsBuilder;
+import mmc.aldebaran.SyntaxException;
+import mmc.modal.visitors.EmersonLeiFormulaVisitor;
 import mmc.modal.visitors.FormulaVisitor;
 import mmc.modal.visitors.TrivialFormulaVisitor;
 import mmc.modal.formulas.Formula;
@@ -9,45 +11,81 @@ import mmc.modal.ParseException;
 import mmc.models.Lts;
 import mmc.models.State;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Main {
 
-    public static void main(String[] args) throws ParseException {
-        if(args.length < 2)
-        {
-            System.err.println("2 arguments required: [lts file] [modal formula file]");
-            System.exit(1);
+    public static void main(String[] args) {
+        if(args.length != 3) {
+            help();
             return;
         }
+        Lts lts = loadAldebaranLts(args[1]);
+        Formula formula = loadFormula(args[2]);
+        FormulaVisitor formulaVisitor = null;
+        switch (args[0].toLowerCase()) {
+            case "trivial":
+                formulaVisitor = new TrivialFormulaVisitor(lts);
+                break;
+            case "improved":
+                formulaVisitor = new EmersonLeiFormulaVisitor(lts);
+                break;
+            default:
+                help();
+                return;
+        }
+
+        Set<State> states = formulaVisitor.calculate(formula);
+        Set<Integer> result = states.stream()
+                .map(State::getNumber)
+                .collect(Collectors.toSet());
+
+        System.out.println(formula);
+        System.out.println(result);
+        System.out.println(result.contains(0));
+    }
+
+    private static Lts loadAldebaranLts(String filename) {
+        // http://www.mcrl2.org/web/user_manual/language_reference/lts.html#id1
+        String aldebaran = readFile(filename);
+        LtsBuilder lb = new LtsBuilder();
         try {
-            String ltscontent = new String(Files.readAllBytes(Paths.get(args[0])));
-            String modalcontent = new String(Files.readAllBytes(Paths.get(args[1])));
-
-            LtsBuilder lb = new LtsBuilder();
-            // http://www.mcrl2.org/web/user_manual/language_reference/lts.html#id1
-            Lts lts = lb.buildStrict(ltscontent);
-
-
-            ModalParser mp = new ModalParser(modalcontent);
-            Formula f = mp.parse();
-
-            FormulaVisitor tfv = new TrivialFormulaVisitor(lts);
-            try {
-                System.out.println("Result for \"" + modalcontent + "\": ");
-                Set<State> result = tfv.calculate(f);
-                System.out.println(result);
-            } catch (UnsupportedOperationException e) {
-                System.out.println(f.getClass());
-            }
-        } catch (IOException e) {
-            System.err.println("Unable to read input files");
+            return lb.buildStrict(aldebaran);
+        } catch (SyntaxException e) {
+            System.err.println(String.format("Unable to parse aldebaran lts from: %s", filename));
             System.exit(2);
-            return;
+            return null;
         }
+    }
+
+    private static Formula loadFormula(String filename) {
+        String formulaText = readFile(filename);
+        ModalParser mp = new ModalParser(formulaText);
+        try {
+            return mp.parse();
+        } catch (ParseException e) {
+            System.err.println(String.format("Unable to parse formula from: %s", filename));
+            System.exit(2);
+            return null;
+        }
+    }
+
+    private static String readFile(String filename) {
+        try {
+            return new String(Files.readAllBytes(Paths.get(filename)));
+        } catch (IOException e) {
+            System.err.println(String.format("Unable to read input file: %s", filename));
+            System.exit(2);
+            return null;
+        }
+    }
+
+    private static void help() {
+        System.err.println("3 arguments required: (trivial | improved) <lts file> <modal formula file>");
+        System.exit(1);
     }
 }

@@ -1,11 +1,20 @@
 package mmc.modal.visitors;
 
 import mmc.modal.formulas.*;
+import mmc.models.Lts;
 import mmc.models.State;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class EmersonLeiFormulaVisitor implements FormulaVisitor {
+    private final Lts lts;
+
+    public EmersonLeiFormulaVisitor(Lts lts) {
+        Objects.requireNonNull(lts);
+        this.lts = lts;
+    }
+
     @Override
     public void visit(BoxFormula formula) {
         System.out.println("emerson lei box");
