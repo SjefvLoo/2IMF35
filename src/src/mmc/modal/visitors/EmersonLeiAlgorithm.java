@@ -4,73 +4,79 @@ import mmc.modal.formulas.*;
 import mmc.models.Lts;
 import mmc.models.State;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class EmersonLeiAlgorithm implements FormulaCalculator, FormulaVisitor {
-    private final Lts lts;
+public class EmersonLeiAlgorithm extends NaiveAlgorithm implements FormulaCalculator, FormulaVisitor {
+    private enum Bound {
+        MU_BOUNDED,
+        NU_BOUNDED,
+        UNBOUNDED,
+    }
+
+    private Bound bound;
 
     public EmersonLeiAlgorithm(Lts lts) {
-        Objects.requireNonNull(lts);
-        this.lts = lts;
-    }
-
-    @Override
-    public void visit(BoxFormula formula) {
-        System.out.println("emerson lei box");
-        throw new UnsupportedOperationException("Not yet implemented!");
-    }
-
-    @Override
-    public void visit(DiamondFormula formula) {
-        System.out.println("emerson lei diamond");
-        throw new UnsupportedOperationException("Not yet implemented!");
-    }
-
-    @Override
-    public void visit(LiteralFalse formula) {
-        System.out.println("emerson lei false");
-        throw new UnsupportedOperationException("Not yet implemented!");
-    }
-
-    @Override
-    public void visit(LiteralTrue formula) {
-        System.out.println("emerson lei true");
-        throw new UnsupportedOperationException("Not yet implemented!");
-    }
-
-    @Override
-    public void visit(LogicAndFormula formula) {
-        System.out.println("emerson lei and");
-        throw new UnsupportedOperationException("Not yet implemented!");
-    }
-
-    @Override
-    public void visit(LogicOrFormula formula) {
-        System.out.println("emerson lei or");
-        throw new UnsupportedOperationException("Not yet implemented!");
+        super(lts);
+        this.bound = Bound.UNBOUNDED;
     }
 
     @Override
     public void visit(MuFormula formula) {
-        System.out.println("emerson lei mu");
-        throw new UnsupportedOperationException("Not yet implemented!");
+        RecursionVariable recursionVariable = formula.getRecursionVariable();
+        Formula subFormula = formula.getFormula();
+
+        System.out.println("*** free bounded all ***");
+        System.out.println(formula.getVariableMatcher().getFree());
+        System.out.println(formula.getVariableMatcher().getBounded());
+        System.out.println(formula.getVariableMatcher().getAll());
+        System.out.println("*** ***");
+
+        if(!this.getFixedPointResults().containsKey(recursionVariable)) {
+            System.out.println(String.format("mu init %s", recursionVariable));
+            this.getFixedPointResults().put(recursionVariable, new HashSet<>());
+        }
+
+        if (this.bound == Bound.NU_BOUNDED) {
+            for (RecursionVariable boundedVariable: formula.getVariableMatcher().getBounded()) {
+                System.out.println(String.format("mu reset %s", boundedVariable));
+                this.getFixedPointResults().put(boundedVariable, new HashSet<>());
+            }
+        }
+
+        Bound oldBound = this.bound;
+        this.bound = Bound.NU_BOUNDED;
+        this.putFormulaResult(formula, this.fixedPoint(subFormula, recursionVariable));
+        this.bound = oldBound;
     }
 
     @Override
     public void visit(NuFormula formula) {
-        System.out.println("emerson lei nu");
-        throw new UnsupportedOperationException("Not yet implemented!");
-    }
+        RecursionVariable recursionVariable = formula.getRecursionVariable();
+        Formula subFormula = formula.getFormula();
 
-    @Override
-    public void visit(RecursionVariable formula) {
-        System.out.println("emerson lei recursion");
-        throw new UnsupportedOperationException("Not yet implemented!");
-    }
+        System.out.println("*** free bounded all ***");
+        System.out.println(formula.getVariableMatcher().getFree());
+        System.out.println(formula.getVariableMatcher().getBounded());
+        System.out.println(formula.getVariableMatcher().getAll());
+        System.out.println("*** ***");
 
-    @Override
-    public Set<State> calculate(Formula formula) {
-        return null;
+        if(!this.getFixedPointResults().containsKey(recursionVariable)) {
+            System.out.println(String.format("nu init %s", recursionVariable));
+            this.getFixedPointResults().put(recursionVariable, this.getStates());
+        }
+
+        if (this.bound == Bound.MU_BOUNDED) {
+            for (RecursionVariable boundedVariable: formula.getVariableMatcher().getBounded()) {
+                System.out.println(String.format("nu reset %s", boundedVariable));
+                this.getFixedPointResults().put(boundedVariable, this.getStates());
+            }
+        }
+
+        Bound oldBound = this.bound;
+        this.bound = Bound.NU_BOUNDED;
+        this.putFormulaResult(formula, this.fixedPoint(subFormula, recursionVariable));
+        this.bound = oldBound;
     }
 }

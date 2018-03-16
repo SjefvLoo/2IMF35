@@ -22,6 +22,18 @@ public class NaiveAlgorithm implements FormulaCalculator, FormulaVisitor {
         this.fixedPointResults = new HashMap<>();
     }
 
+    protected Lts getLts() {
+        return this.lts;
+    }
+
+    protected Set<State> getStates() {
+        return this.states;
+    }
+
+    protected Map<RecursionVariable, Set<State>> getFixedPointResults() {
+        return this.fixedPointResults;
+    }
+
     @Override
     public void visit(BoxFormula formula) {
         Set<State> formulaResult = this.getFormulaResult(formula.getFormula());
@@ -90,7 +102,7 @@ public class NaiveAlgorithm implements FormulaCalculator, FormulaVisitor {
         this.putFormulaResult(formula, this.fixedPoint(subFormula, recursionVariable));
     }
 
-    private Set<State> fixedPoint(Formula subFormula, RecursionVariable recursionVariable) {
+    protected Set<State> fixedPoint(Formula subFormula, RecursionVariable recursionVariable) {
         Boolean equilibrium;
         do {
             subFormula.accept(this);
@@ -116,12 +128,12 @@ public class NaiveAlgorithm implements FormulaCalculator, FormulaVisitor {
         this.results.clear();
     }
 
-    private Set<State> getFormulaResult(Formula formula) {
+    protected Set<State> getFormulaResult(Formula formula) {
         formula.accept(this);
         return this.results.get(formula);
     }
 
-    private void putFormulaResult(Formula formula, Set<State> result) {
+    protected void putFormulaResult(Formula formula, Set<State> result) {
         this.results.put(formula, result);
     }
 }
