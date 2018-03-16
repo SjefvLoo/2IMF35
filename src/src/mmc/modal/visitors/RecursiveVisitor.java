@@ -16,12 +16,12 @@ public abstract class RecursiveVisitor implements FormulaVisitor {
 
     @Override
     public void visit(LiteralFalse formula) {
-
+        // Do nothing
     }
 
     @Override
     public void visit(LiteralTrue formula) {
-
+        // Do nothing
     }
 
     @Override
@@ -50,6 +50,6 @@ public abstract class RecursiveVisitor implements FormulaVisitor {
 
     @Override
     public void visit(RecursionVariable formula) {
-
+        // Do nothing
     }
 }

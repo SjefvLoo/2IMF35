@@ -6,41 +6,37 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class VariableMatcher implements FormulaVisitor {
+public class VariableMatcher extends RecursiveVisitor implements FormulaVisitor {
     private final RecursionVariable variable;
     private final Set<RecursionVariable> free;
+    private final Set<RecursionVariable> bounded;
+    private final Set<RecursionVariable> all;
 
     private VariableMatcher(RecursionVariable variable) {
         Objects.requireNonNull(variable);
         this.variable = variable;
         this.free = new HashSet<>();
+        this.bounded = new HashSet<>();
+        this.all = new HashSet<>();
     }
 
-    public static Set<RecursionVariable> findFreeVariables(FixedPointFormula formula) {
+    public static VariableMatcher findVariables(FixedPointFormula formula) {
         VariableMatcher matcher = new VariableMatcher(formula.getRecursionVariable());
         formula.getFormula().accept(matcher);
 
-        return matcher.free;
+        return matcher;
     }
 
-    @Override
-    public void visit(BoxFormula formula) {
-        formula.getFormula().accept(this);
+    public Set<RecursionVariable> getFree() {
+        return this.free;
     }
 
-    @Override
-    public void visit(DiamondFormula formula) {
-        formula.getFormula().accept(this);
+    public Set<RecursionVariable> getBounded() {
+        return this.bounded;
     }
 
-    @Override
-    public void visit(LiteralFalse formula) {
-        return;  // Do nothing.
-    }
-
-    @Override
-    public void visit(LiteralTrue formula) {
-        return;  // Do nothing.
+    public Set<RecursionVariable> getAll() {
+        return  this.all;
     }
 
     @Override
@@ -57,21 +53,29 @@ public class VariableMatcher implements FormulaVisitor {
 
     @Override
     public void visit(MuFormula formula) {
-        formula.getFreeVariables().stream()
+        VariableMatcher variableMatcher = formula.getVariableMatcher();
+        variableMatcher.getFree().stream()
                 .filter(other -> !this.variable.equals(other))
                 .map(this.free::add);
+        this.bounded.addAll(variableMatcher.bounded);
+        this.all.addAll(variableMatcher.getAll());
     }
 
     @Override
     public void visit(NuFormula formula) {
-        formula.getFreeVariables().stream()
+        VariableMatcher variableMatcher = formula.getVariableMatcher();
+        variableMatcher.getFree().stream()
                 .filter(other -> !this.variable.equals(other))
                 .map(this.free::add);
+        this.all.addAll(variableMatcher.getAll());
     }
 
     @Override
     public void visit(RecursionVariable formula) {
-        if(!this.variable.equals(formula)) {
+        this.all.add(formula);
+        if(this.variable.equals(formula)) {
+            this.bounded.add(formula);
+        } else {
             this.free.add(formula);
         }
     }
