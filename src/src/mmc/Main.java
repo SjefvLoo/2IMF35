@@ -30,7 +30,7 @@ public class Main {
 
             LtsBuilder lb = new LtsBuilder();
             // http://www.mcrl2.org/web/user_manual/language_reference/lts.html#id1
-            Lts lts = lb.build(ltscontent);
+            Lts lts = lb.buildStrict(ltscontent);
 
 
             ModalParser mp = new ModalParser(modalcontent);

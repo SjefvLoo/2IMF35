@@ -5,27 +5,13 @@ import mmc.models.Lts;
 import mmc.models.State;
 
 public class Parser {
-    private boolean strict;
     private Lexer lexer;
     private int transitions;
     private int states;
     private Lts lts;
 
     public Parser() {
-        this(false);
-    }
-
-    public Parser(boolean strict) {
-        this.strict = strict;
         this.reset();
-    }
-
-    public boolean isStrict() {
-        return this.strict;
-    }
-
-    public void setStrict(boolean strict) {
-        this.strict = strict;
     }
 
     public Lts parse(Lexer lexer) {
@@ -34,9 +20,6 @@ public class Parser {
 
         this.parseHeader();
         for (int i = 0; i < this.transitions; i++) {
-            if (this.strict) {
-                eatToken(TokenType.NEWLINE);
-            }
             this.parseTransition();
         }
         this.eatToken(TokenType.EOF);
@@ -44,7 +27,7 @@ public class Parser {
         return this.lts;
     }
 
-    private void parseHeader() {
+    protected void parseHeader() {
         this.eatToken(TokenType.DES);
 
         this.eatToken(TokenType.LPAREN);
@@ -64,28 +47,20 @@ public class Parser {
         this.lts = new Lts(this.states, startIndex);
     }
 
-    private int parseStartIndex() {
+    protected int parseStartIndex() {
         int startIndex = this.parseNumber();
-        if (this.strict && startIndex != 0) {
-            // http://cadp.inria.fr/man/aut.html
-            throw new StrictParseException("Initial state must be 0 according to specification", this.lexer.getIndex());
-        }
 
         return startIndex;
     }
 
-    private int parseNumber() {
+    protected int parseNumber() {
         Token token = this.nextToken(TokenType.NUMBER);
         int number = Integer.parseInt(token.getData());
-
-        if (this.strict && number != 0 && token.getData().charAt(0) == '0') {
-            throw new StrictParseException("Number has leading a leading 0", this.lexer.getIndex());
-        }
 
         return number;
     }
 
-    private void parseTransition() {
+    protected void parseTransition() {
         this.eatToken(TokenType.LPAREN);
 
         State start = this.parseState();
@@ -102,11 +77,11 @@ public class Parser {
 
         boolean success = start.addTransition(label, end);
         if (!success) {
-            throw new ParseException("Duplicate transition encountered", this.lexer.getIndex());
+            throw new ParseException("Duplicate transition encountered", this.getIndex());
         }
     }
 
-    private Label parseLabel() {
+    protected Label parseLabel() {
         Token token = this.nextToken();
         String labelText = token.getData();
         switch (token.getType()) {
@@ -118,31 +93,27 @@ public class Parser {
                 }
                 break;
             default:
-                throw new ParseException(this.lexer.getIndex());
+                throw new ParseException(this.getIndex());
 
-        }
-        if (this.strict && labelText.length() > 5000) {
-            throw new StrictParseException("A label can contain at most 5000 characters", this.lexer.getIndex());
         }
 
         return new Label(labelText);
     }
 
-    private State parseState() {
+    protected State parseState() {
         int number = this.parseNumber();
         if (number >= this.states) {
-            throw new ParseException(String.format("Unknown state with number %s", number), this.lexer.getIndex());
+            throw new ParseException(String.format("Unknown state with number %s", number), this.getIndex());
         }
 
         return this.lts.getState(number);
     }
 
-    private boolean isLayout(Token token) {
-        return (token.getType() == TokenType.LAYOUT)
-            || (!this.strict && (token.getType() == TokenType.NEWLINE));
+    protected boolean isLayout(Token token) {
+        return token.getType() == TokenType.LAYOUT || token.getType() == TokenType.NEWLINE;
     }
 
-    private Token nextToken() {
+    protected final Token nextToken() {
         Token token = this.lexer.next();
         while (this.isLayout(token)) {
             token = this.lexer.next();
@@ -151,20 +122,24 @@ public class Parser {
         return token;
     }
 
-    private Token nextToken(TokenType tokenType) {
+    protected final Token nextToken(TokenType tokenType) {
         Token token = this.nextToken();
         if (token.getType() != tokenType) {
-            throw new ParseException(this.lexer.getIndex());
+            throw new ParseException(this.getIndex());
         }
 
         return token;
     }
 
-    private void eatToken(TokenType tokenType) {
+    protected final void eatToken(TokenType tokenType) {
         this.nextToken(tokenType);
     }
 
-    private void reset() {
+    protected final int getIndex() {
+        return this.lexer.getIndex();
+    }
+
+    protected void reset() {
         this.lexer = null;
         this.states = 0;
         this.transitions = 0;
