@@ -91,14 +91,16 @@ public class NaiveAlgorithm implements FormulaCalculator, FormulaVisitor {
     }
 
     private Set<State> fixedPoint(Formula subFormula, RecursionVariable recursionVariable) {
+        int i = 0;
         Boolean equilibrium;
         do {
             subFormula.accept(this);
             Set<State> result = this.results.get(subFormula);
             Set<State> previousResult = this.fixedPointResults.put(recursionVariable, result);
             equilibrium = result.equals(previousResult);
+            i++;
         } while(!equilibrium);
-
+        System.out.println(String.format("Calculated %s in %d iterations.", recursionVariable, i));
         return this.fixedPointResults.get(recursionVariable);
     }
 

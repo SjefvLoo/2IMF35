@@ -1,0 +1,1 @@
+=== Run algorithm naive on LTS PartII/1//dining_10.aut testing formula PartII/1//invariantly_inevitably_eat.mcf ===

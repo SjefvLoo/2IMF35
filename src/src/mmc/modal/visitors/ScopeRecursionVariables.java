@@ -6,6 +6,9 @@ import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Assign a unique 
+ */
 public class ScopeRecursionVariables extends RecursiveVisitor
 {
     private final Map<Character, Integer> recursionMap;

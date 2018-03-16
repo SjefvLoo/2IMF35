@@ -1,0 +1,54 @@
+=== Run algorithm naive on LTS PartII/1//dining_2.aut testing formula PartII/1//invariantly_inevitably_eat.mcf ===
+
+real	0m0,319s
+user	0m0,404s
+sys	0m0,036s
+Calculated Y{2} in 2 iterations.
+Calculated Y{2} in 2 iterations.
+Calculated Y{2} in 2 iterations.
+Calculated X{1} in 3 iterations.
+nu X{1}.(([i]X{1} && ([plato]X{1} && [others]X{1})) && mu Y{2}.([i]Y{2} && (<plato>true || <others>true)))
+[]
+Verdict: false
+=== Run algorithm naive on LTS PartII/1//dining_2.aut testing formula PartII/1//invariantly_plato_starves.mcf ===
+
+real	0m0,314s
+user	0m0,433s
+sys	0m0,012s
+Calculated Y{2} in 3 iterations.
+Calculated Y{2} in 3 iterations.
+Calculated Y{2} in 3 iterations.
+Calculated Y{2} in 3 iterations.
+Calculated Y{2} in 3 iterations.
+Calculated Y{2} in 3 iterations.
+Calculated X{1} in 6 iterations.
+nu X{1}.(([i]X{1} && [others]X{1}) && nu Y{2}.(<i>Y{2} || <others>Y{2}))
+[]
+Verdict: false
+=== Run algorithm naive on LTS PartII/1//dining_2.aut testing formula PartII/1//invariantly_possibly_eat.mcf ===
+
+real	0m0,342s
+user	0m0,439s
+sys	0m0,042s
+Calculated Y{2} in 8 iterations.
+Calculated Y{2} in 8 iterations.
+Calculated Y{2} in 8 iterations.
+Calculated Y{2} in 8 iterations.
+Calculated Y{2} in 8 iterations.
+Calculated Y{2} in 8 iterations.
+Calculated Y{2} in 8 iterations.
+Calculated X{1} in 7 iterations.
+nu X{1}.(([i]X{1} && ([plato]X{1} && [others]X{1})) && mu Y{2}.((<i>Y{2} || <others>Y{2}) || <plato>true))
+[]
+Verdict: false
+=== Run algorithm naive on LTS PartII/1//dining_2.aut testing formula PartII/1//plato_infinitely_often_can_eat.mcf ===
+
+real	0m0,334s
+user	0m0,435s
+sys	0m0,017s
+Calculated Y{2} in 8 iterations.
+Calculated Y{2} in 8 iterations.
+Calculated X{1} in 2 iterations.
+nu X{1}.mu Y{2}.((<plato>X{1} || <i>Y{2}) || <others>Y{2})
+[0, 1, 2, 3, 5, 6, 7, 8, 9]
+Verdict: true

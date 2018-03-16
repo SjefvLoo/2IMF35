@@ -1,0 +1,58 @@
+=== Run algorithm naive on LTS PartII/1//dining_3.aut testing formula PartII/1//invariantly_inevitably_eat.mcf ===
+
+real	0m0,359s
+user	0m0,478s
+sys	0m0,036s
+Calculated Y{2} in 4 iterations.
+Calculated Y{2} in 4 iterations.
+Calculated Y{2} in 4 iterations.
+Calculated X{1} in 3 iterations.
+nu X{1}.(([i]X{1} && ([plato]X{1} && [others]X{1})) && mu Y{2}.([i]Y{2} && (<plato>true || <others>true)))
+[]
+Verdict: false
+=== Run algorithm naive on LTS PartII/1//dining_3.aut testing formula PartII/1//invariantly_plato_starves.mcf ===
+
+real	0m0,378s
+user	0m0,532s
+sys	0m0,034s
+Calculated Y{2} in 4 iterations.
+Calculated Y{2} in 4 iterations.
+Calculated Y{2} in 4 iterations.
+Calculated Y{2} in 4 iterations.
+Calculated Y{2} in 4 iterations.
+Calculated Y{2} in 4 iterations.
+Calculated Y{2} in 4 iterations.
+Calculated Y{2} in 4 iterations.
+Calculated X{1} in 8 iterations.
+nu X{1}.(([i]X{1} && [others]X{1}) && nu Y{2}.(<i>Y{2} || <others>Y{2}))
+[]
+Verdict: false
+=== Run algorithm naive on LTS PartII/1//dining_3.aut testing formula PartII/1//invariantly_possibly_eat.mcf ===
+
+real	0m0,425s
+user	0m0,597s
+sys	0m0,052s
+Calculated Y{2} in 11 iterations.
+Calculated Y{2} in 11 iterations.
+Calculated Y{2} in 11 iterations.
+Calculated Y{2} in 11 iterations.
+Calculated Y{2} in 11 iterations.
+Calculated Y{2} in 11 iterations.
+Calculated Y{2} in 11 iterations.
+Calculated Y{2} in 11 iterations.
+Calculated Y{2} in 11 iterations.
+Calculated X{1} in 9 iterations.
+nu X{1}.(([i]X{1} && ([plato]X{1} && [others]X{1})) && mu Y{2}.((<i>Y{2} || <others>Y{2}) || <plato>true))
+[]
+Verdict: false
+=== Run algorithm naive on LTS PartII/1//dining_3.aut testing formula PartII/1//plato_infinitely_often_can_eat.mcf ===
+
+real	0m0,383s
+user	0m0,513s
+sys	0m0,038s
+Calculated Y{2} in 11 iterations.
+Calculated Y{2} in 11 iterations.
+Calculated X{1} in 2 iterations.
+nu X{1}.mu Y{2}.((<plato>X{1} || <i>Y{2}) || <others>Y{2})
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34]
+Verdict: true
