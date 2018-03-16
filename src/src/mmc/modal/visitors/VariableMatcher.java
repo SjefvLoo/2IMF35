@@ -74,7 +74,6 @@ public class VariableMatcher extends RecursiveVisitor implements FormulaVisitor 
 
     @Override
     public void visit(RecursionVariable formula) {
-        System.out.println("            " + formula.toString());
         this.all.add(formula);
         if(this.variable.equals(formula)) {
             this.bounded.add(formula);
