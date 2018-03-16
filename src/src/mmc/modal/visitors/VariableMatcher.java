@@ -69,6 +69,7 @@ public class VariableMatcher extends RecursiveVisitor implements FormulaVisitor 
         variableMatcher.getFree().stream()
                 .filter(other -> !this.variable.equals(other))
                 .map(this.free::add);
+        this.bounded.addAll(variableMatcher.bounded);
         this.all.addAll(variableMatcher.getAll());
     }
 
