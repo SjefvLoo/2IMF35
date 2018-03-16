@@ -27,7 +27,7 @@ public class NaiveAlgorithm implements FormulaCalculator, FormulaVisitor {
         Set<State> formulaResult = this.getFormulaResult(formula.getFormula());
         Label action = formula.getAction();
         Set<State> result = Arrays.stream(this.lts.getStates())
-            .filter(startState -> startState.getTransitionLabels().contains(action) &&
+            .filter(startState -> !startState.getTransitionLabels().contains(action) ||
                 startState.transition(action).stream()
                     .allMatch(formulaResult::contains))
             .collect(Collectors.toSet());
