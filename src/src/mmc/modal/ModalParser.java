@@ -1,6 +1,7 @@
 package mmc.modal;
 
 import mmc.modal.formulas.*;
+import mmc.modal.visitors.ScopeRecursionVariables;
 import mmc.models.Label;
 
 import java.lang.reflect.InvocationTargetException;
@@ -54,12 +55,18 @@ public class ModalParser {
             {
                 throw new ParseException("End of formula expected.", i);
             }
+            scopeRecursionVariables(f);
             return f;
         }
         else
         {
             throw new ParseException("Unknown start of the formula.", i);
         }
+    }
+
+    private void scopeRecursionVariables(Formula f){
+        ScopeRecursionVariables srv = new ScopeRecursionVariables();
+        f.accept(srv);
     }
 
     private Formula parseFormula() throws ParseException {
