@@ -3,6 +3,7 @@ package mmc.modal;
 import mmc.modal.formulas.*;
 import mmc.models.Label;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -201,7 +202,7 @@ public class ModalParser {
         expect("(");
         Formula f;
         Formula g;
-        LogicFormula l;
+        Class<? extends LogicFormula> c;
         skipWhiteSpace();
         if(formula_first_set.contains(getChar())) {
             f = parseFormula();
@@ -209,7 +210,7 @@ public class ModalParser {
             throw new ParseException("formula expected.",i);
         }
         if(operator_first_set.contains(getChar())) {
-            l = parseOperator();
+            c = parseOperator();
         } else {
             throw new ParseException("Operator expected.", i);
         }
@@ -220,12 +221,17 @@ public class ModalParser {
         }
         expect(")");
         skipWhiteSpace();
-        l.setLeft(f);
-        l.setRight(g);
-        return l;
+        try {
+            return c.getConstructor(Formula.class, Formula.class).newInstance(f, g);
+        } catch (InstantiationException |
+                IllegalAccessException |
+                NoSuchMethodException |
+                InvocationTargetException e) {
+            throw new RuntimeException(String.format("Cannot instantiate correct Logic Formula at %s", i), e);
+        }
     }
 
-    private LogicFormula parseOperator() throws ParseException
+    private Class<? extends LogicFormula> parseOperator() throws ParseException
     {
         if(and_operator_first_set.contains(getChar()))
         {
@@ -238,18 +244,18 @@ public class ModalParser {
         return null;
     }
 
-    private LogicFormula parseLogicAndOperator() throws ParseException
+    private Class<LogicAndFormula> parseLogicAndOperator() throws ParseException
     {
         expect("&&");
         skipWhiteSpace();
-        return new LogicAndFormula();
+        return LogicAndFormula.class;
     }
 
-    private LogicFormula parseLogicOrOperator() throws ParseException
+    private Class<LogicOrFormula> parseLogicOrOperator() throws ParseException
     {
         expect("||");
         skipWhiteSpace();
-        return new LogicOrFormula();
+        return LogicOrFormula.class;
     }
 
     private void expect(String e) throws ParseException

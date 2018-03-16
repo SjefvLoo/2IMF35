@@ -3,23 +3,20 @@ package mmc.modal.formulas;
 import java.util.Objects;
 
 public abstract class LogicFormula implements Formula {
-    private Formula left;
-    private Formula right;
+    private final Formula left;
+    private final Formula right;
+
+    public LogicFormula(Formula left, Formula right) {
+        this.left = left;
+        this.right = right;
+    }
 
     public Formula getLeft() {
         return this.left;
     }
 
-    public void setLeft(Formula left) {
-        this.left = left;
-    }
-
     public Formula getRight() {
         return this.right;
-    }
-
-    public void setRight(Formula right) {
-        this.right = right;
     }
 
     @Override
