@@ -1,0 +1,81 @@
+=== Run algorithm emersonlei on LTS PartII/1//dining_9.aut testing formula PartII/1//invariantly_inevitably_eat.mcf ===
+
+real	27m43,286s
+user	42m14,602s
+sys	1m4,223s
+Calculated Y{2} in 16 iterations.
+Calculated Y{2} in 16 iterations.
+Calculated Y{2} in 16 iterations.
+Calculated Y{2} in 16 iterations.
+Calculated Y{2} in 16 iterations.
+Calculated Y{2} in 16 iterations.
+Calculated X{1} in 6 iterations.
+nu X{1}.(([i]X{1} && ([plato]X{1} && [others]X{1})) && mu Y{2}.([i]Y{2} && (<plato>true || <others>true)))
+[]
+Verdict: false
+=== Run algorithm emersonlei on LTS PartII/1//dining_9.aut testing formula PartII/1//invariantly_plato_starves.mcf ===
+
+real	23m45,080s
+user	42m53,819s
+sys	1m3,509s
+Calculated Y{2} in 4 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated Y{2} in 1 iterations.
+Calculated X{1} in 23 iterations.
+nu X{1}.(([i]X{1} && [others]X{1}) && nu Y{2}.(<i>Y{2} || <others>Y{2}))
+[]
+Verdict: false
+=== Run algorithm emersonlei on LTS PartII/1//dining_9.aut testing formula PartII/1//invariantly_possibly_eat.mcf ===
+
+real	31m14,596s
+user	46m13,451s
+sys	1m4,816s
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated Y{2} in 29 iterations.
+Calculated X{1} in 24 iterations.
+nu X{1}.(([i]X{1} && ([plato]X{1} && [others]X{1})) && mu Y{2}.((<i>Y{2} || <others>Y{2}) || <plato>true))
+[]
+Verdict: false
+=== Run algorithm emersonlei on LTS PartII/1//dining_9.aut testing formula PartII/1//plato_infinitely_often_can_eat.mcf ===
