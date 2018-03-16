@@ -25,7 +25,9 @@ for algo in 'trivial' 'improved'; do
             ./testcases/fixpoints_only \
             ./testcases/combined/; do
         for file in "${dir}"/form*.mcf; do
-            run "${algo}" "${dir}/test.aut" "${file}"
+            if [ -f "${file}" ]; then
+                run "${algo}" "${dir}/test.aut" "${file}"
+            fi
         done
     done
 done
