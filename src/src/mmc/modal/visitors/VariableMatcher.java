@@ -18,7 +18,7 @@ public class VariableMatcher implements FormulaVisitor {
 
     public static Set<RecursionVariable> findFreeVariables(FixedPointFormula formula) {
         VariableMatcher matcher = new VariableMatcher(formula.getRecursionVariable());
-        formula.accept(matcher);
+        formula.getFormula().accept(matcher);
 
         return matcher.free;
     }
