@@ -11,6 +11,11 @@ public class InputLiftingStrategy extends LiftingStrategy {
     private final List<Vertex> vertexOrder;
     private Iterator<Vertex> vertexIterator;
 
+    @Override
+    public boolean isCircular() {
+        return true;
+    }
+
     public InputLiftingStrategy(final ParityGame parityGame) {
         super(parityGame);
         this.vertexOrder = new ArrayList<>(this.getParityGame().getVertices().values());

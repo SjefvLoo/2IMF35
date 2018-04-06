@@ -51,7 +51,7 @@ public class Main {
             case SSC:
                 liftingStrategy = new ShortestSelfCycleStrategy(parityGame);
                 break;
-            default: // TODO: add more
+            default:
                 Main.help();
                 return;
         }
@@ -61,6 +61,8 @@ public class Main {
 
         System.out.println(String.format("Even: %s", Main.verticesToInts(parityGameResult.getEven())));
         System.out.println(String.format("Odd: %s", Main.verticesToInts(parityGameResult.getOdd())));
+        System.out.println("Attempted lifts: " + smallProgressMeasures.getLiftingAttempts());
+        System.out.println("Actual lifts: " + smallProgressMeasures.getLifts());
     }
 
     private static Set<Integer> verticesToInts(Set<Vertex> vertices) {

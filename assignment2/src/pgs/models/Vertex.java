@@ -15,7 +15,6 @@ public class Vertex {
         this.id = id;
 
         if (priority < 0) {
-            // TODO: or positive?
             throw new IllegalArgumentException("priority must be a natural number");
         }
 

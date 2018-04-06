@@ -15,17 +15,52 @@ public class SmallProgressMeasures {
     private int d;
     private int[] priorityCount;
     private int[] maxComponents;
-    private Measure maxMeasure;
     private Map<Vertex, Measure> varrho;
     private Map<Vertex, Boolean> lifted;
     private int liftedCount;
-    private MeasureComparator[] measureComparators;
+    private int liftingAttempts;
+    private int lifts;
 
     public SmallProgressMeasures() {
 
     }
 
     public ParityGameResult calculate(ParityGame parityGame, LiftingStrategy liftingStrategy) {
+        reset(parityGame, liftingStrategy);
+
+        // Algorithm (26/49)
+        while (this.isLiftable()) {
+            // If this raises a NoSuchElementException, then there is a problem with the strategy.
+            Vertex v = this.liftingStrategy.next();
+            Measure vMeasure = this.varrho.get(v);
+            Measure vLiftedMeasure = this.lift(v);
+            this.liftingAttempts++;
+
+            if (vMeasure.lt(vLiftedMeasure)) {
+                this.varrho.put(v, vLiftedMeasure);
+                this.lifts ++ ;
+                if(liftingStrategy.isCircular()) {
+                    Boolean oldValue = this.lifted.put(v, false);
+                    if (oldValue != null && oldValue) {
+                        this.liftedCount--;
+                    }
+                } else {
+                    this.resetLifted();
+                }
+            } else {
+                Boolean oldValue = this.lifted.put(v, true);
+                if (oldValue != null && !oldValue) {
+                    this.liftedCount++;
+                }
+            }
+        }
+
+        return this.buildResult();
+    }
+
+    private void reset(ParityGame parityGame, LiftingStrategy liftingStrategy) {
+        this.liftingAttempts = 0;
+        this.lifts = 0;
         this.parityGame = parityGame;
         this.liftingStrategy = liftingStrategy;
         this.d = 1 + this.parityGame.getMaxPriority();
@@ -36,19 +71,12 @@ public class SmallProgressMeasures {
                 .getOrDefault(i, new HashSet<>(0,1 ))
                 .size();
         }
-        // TODO: must prioritycount[0] == 0?
 
         this.maxComponents = new int[this.d];
         for (int i = 0; i < this.maxComponents.length; i++) {
             if(i % 2 != 0) {
                 this.maxComponents[i] = this.priorityCount[i];
             }
-        }
-        this.maxMeasure = new Measure(this.maxComponents);
-
-        this.measureComparators = new MeasureComparator[this.d];
-        for (int i = 0; i < this.measureComparators.length; i++) {
-            this.measureComparators[i] = new MeasureComparator(i);
         }
 
         this.lifted = this.parityGame.getVertices()
@@ -58,35 +86,10 @@ public class SmallProgressMeasures {
         this.liftedCount = 0;
 
 
-        // Algorithm (26/49)
         this.varrho = this.parityGame.getVertices()
             .values()
             .stream()
             .collect(Collectors.toMap(Function.identity(), v -> new Measure(new int[this.d])));
-        while (this.isLiftable()) {
-            // If this raises a NoSuchElementException, then there is a problem with the strategy.
-            Vertex v = this.liftingStrategy.next();
-            Measure vMeasure = this.varrho.get(v);
-            Measure vLiftedMeasure = this.lift(v);
-
-            // TODO: is this correct way if maintaining?
-            if (vMeasure.lt(vLiftedMeasure)) {
-                Boolean oldValue = this.lifted.put(v, false);
-                // TODO: the following or this?
-                this.resetLifted();
-                //if (oldValue != null && oldValue) {
-                //    this.liftedCount--;
-                //}
-            } else {
-                Boolean oldValue = this.lifted.put(v, true);
-                if (oldValue != null && !oldValue) {
-                    this.liftedCount++;
-                }
-            }
-            this.varrho.put(v, vLiftedMeasure);
-        }
-
-        return this.buildResult();
     }
 
     private void resetLifted() {
@@ -225,5 +228,13 @@ public class SmallProgressMeasures {
             .collect(Collectors.toSet());
 
         return new ParityGameResult(even, odd);
+    }
+
+    public int getLiftingAttempts() {
+        return liftingAttempts;
+    }
+
+    public int getLifts() {
+        return lifts;
     }
 }
