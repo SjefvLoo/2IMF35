@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+data() {
+    tail -q -n +2 "$1"
+}
+
+convert() {
+    # Assume starts with parity line
+    set -- "$1" "$(data "$1" | cut -d' ' -f 2 | sort -r | head -n 1)"
+    head -q -n 1 "$1"
+    data "$1" | awk -v max="$2" '{$2 = max - $2; print}'
+}
+
+for file; do
+    convert "${file}"
+done

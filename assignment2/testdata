@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+set -e
+url='http://www.win.tue.nl/~timw/downloads/amc2017/'
+
+cd ./testcases || exit
+for file in 'ccp-games' \
+        'elevator-games' \
+        'dining-games'; do
+    if [ ! -d ./"${file}" ]; then
+        if [ ! -f ./"${file}.tar.bz2" ]; then
+            curl -fO "${url}/${file}.tar.bz2"
+        fi
+        mkdir ./"${file}" && tar xjvf ./"${file}.tar.bz2" -C ./"${file}"
+    fi
+done

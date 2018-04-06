@@ -1,4 +1,12 @@
- Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
+# testcases
+testcases/ccp-games.tar.bz2
+testcases/dining-games.tar.bz2
+testcases/elevator-games.tar.bz2
+testcases/ccp-games/
+testcases/dining-games/
+testcases/elevator-games/
+
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff:
