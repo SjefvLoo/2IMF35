@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+set -e
+sudo -k sh -c 'apt-get update && apt-get install -y opam'
+opam init
+. "${HOME}/.opam/opam-init/init.sh"
+opam update
+opam upgrade
+opam switch 4.03.0
+eval "$(opam config env)"
+opam install ocamlbuild ocamlfind ounit TCSLib extlib ocaml-sat-solvers minisat
+git submodule init
+git submodule update
+cd pgsolver
+ocaml setup.ml -configure
+ocaml setup.ml -build
