@@ -160,10 +160,13 @@ public class SmallProgressMeasures {
     private Measure prog(Vertex v, Vertex w) {
         // Prog (21/49)
         int vPriority = v.getPriority();
-        // TODO: assert vPriority is not 0?
         Measure wMeasure = this.varrho.get(w);
         if (wMeasure == null) {
             throw new IllegalStateException("Measure for vertex not found");
+        }
+
+        if (wMeasure.isTop()) {
+            return Measure.top();
         }
 
         Measure measure;
@@ -178,59 +181,53 @@ public class SmallProgressMeasures {
 
     private Measure ProgEven(int vPriority, Measure wMeasure) {
         // XXX: Repeated calls for same input will return the same result
+
+        assert !wMeasure.isTop();
         int[] components = this.computeComponents(vPriority, wMeasure);
         Measure measure = new Measure(components);
-        // TODO: no further checking?
 
         return measure;
     }
 
     private Measure ProgOdd(int vPriority, Measure wMeasure) {
         // XXX: Repeated calls for same input will return increased result (till top)
-        if (wMeasure.isTop()) {
-            // TODO: correct fast return?
-            return Measure.top();
-        }
 
+        assert !wMeasure.isTop();
         int[] components = this.computeComponents(vPriority, wMeasure);
-        // TODO: what if vPriority==0?
         boolean incremented = false;
-        for (int i = vPriority; i >= 0; i--) {
+        for (int i = vPriority; i >= 0 && !incremented; i--) {
             if (this.maxComponents[i] > components[i]) {
                 components[i]++;
                 incremented = true;
-                break;
             } else {
                 components[i] = 0;
             }
         }
         if(!incremented) {
-            // TODO: did we find top?
             return Measure.top();
         }
 
         Measure measure = new Measure(components);
-        // TODO: no further checking?
 
         return measure;
     }
 
     private int[] computeComponents(int vPriority, Measure wMeasure) {
+        assert !wMeasure.isTop();
         int[] components = new int[this.d];
-        int[] wComponents = wMeasure.isTop() ? this.maxComponents : wMeasure.getComponents();
+        int[] wComponents = wMeasure.getComponents();
         for (int i = 0; i <= vPriority; i++) {
             components[i] = wComponents[i];
         }
-        // TODO: trivial for loop
-        for (int i = vPriority + 1; i < components.length; i++) {
-            components[i] = 0;
-        }
+        // Loop is trivial because int is 0 by default
+//        for (int i = vPriority + 1; i < components.length; i++) {
+//            components[i] = 0;
+//        }
 
         return components;
     }
 
     private ParityGameResult buildResult() {
-        // TODO: check if odd should get top.
         Set<Vertex> even = this.varrho.entrySet()
             .stream()
             .filter(entry -> !entry.getValue().isTop())
