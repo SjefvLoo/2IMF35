@@ -217,7 +217,7 @@ public class SmallProgressMeasures {
 
     private int[] computeComponents(int vPriority, Measure wMeasure) {
         int[] components = new int[this.d];
-        int[] wComponents = wMeasure.getComponents();
+        int[] wComponents = wMeasure.isTop() ? this.maxComponents : wMeasure.getComponents();
         for (int i = 0; i <= vPriority; i++) {
             components[i] = wComponents[i];
         }
