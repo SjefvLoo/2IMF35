@@ -128,13 +128,6 @@ public class SmallProgressMeasures {
         }
 
         return minimized;
-//        return this.parityGame.getSuccessors()
-//            .get(v)
-//            .stream()
-//            .map(w -> this.prog(v, w))
-//            .reduce(
-//                Measure.top(),
-//                BinaryOperator.minBy(this.measureComparators[this.d]));
     }
 
     private Measure liftOdd(Vertex v) {
@@ -147,14 +140,6 @@ public class SmallProgressMeasures {
         }
 
         return maximized;
-//        return this.parityGame.getSuccessors()
-//            .get(v)
-//            .stream()
-//            .map(w -> this.prog(v, w))
-//            .reduce(
-//                new Measure(new int[this.d]),
-//                BinaryOperator.maxBy(this.measureComparators[this.d]));
-
     }
 
     private Measure prog(Vertex v, Vertex w) {
