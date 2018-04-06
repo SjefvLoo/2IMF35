@@ -17,6 +17,11 @@ public class InputLiftingStrategy extends LiftingStrategy {
         if (this.vertexOrder.size() < 1) {
             throw new IllegalStateException("Require at least one state in the parity game");
         }
+        this.initializeIterator();
+    }
+
+    protected void initializeIterator()
+    {
         this.vertexIterator = this.vertexOrder.iterator();
     }
 

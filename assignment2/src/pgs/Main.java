@@ -8,6 +8,7 @@ import pgs.pgsolver.SyntaxException;
 import pgs.strategies.InputLiftingStrategy;
 import pgs.strategies.LiftingStrategy;
 import pgs.strategies.RandomLiftingStrategy;
+import pgs.strategies.ShortestSelfCycleStrategy;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,6 +23,7 @@ public class Main {
     public enum Strategy {
         INPUT,
         RANDOM,
+        SSC,
         ;
     }
 
@@ -45,6 +47,9 @@ public class Main {
                 break;
             case RANDOM:
                 liftingStrategy = new RandomLiftingStrategy(parityGame);
+                break;
+            case SSC:
+                liftingStrategy = new ShortestSelfCycleStrategy(parityGame);
                 break;
             default: // TODO: add more
                 Main.help();
