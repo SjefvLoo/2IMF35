@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+mkdir -p ./out/artifacts/assignment2_jar/
+jar cvfe ./out/artifacts/assignment2_jar/assignment2.jar pgs.Main -C ./out/production/ . "$@"
+
