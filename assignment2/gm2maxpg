@@ -11,5 +11,5 @@ convert() {
 }
 
 for file; do
-    convert "${file}"
+    convert "${file}" > "${file%.gm}.maxpg"
 done
