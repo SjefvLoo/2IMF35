@@ -9,6 +9,7 @@ public class ParityGame {
     public static final float DEFAULT_LOAD_FACTOR = 0.75f;
     private final Map<Integer, Vertex> vertices;
     private final Map<Vertex, Set<Vertex>> successors;
+    private final Map<Vertex, Set<Vertex>> precessors;
     private final Map<Integer, Set<Vertex>> priorities;
     private final int maxPriority;
 
@@ -19,12 +20,22 @@ public class ParityGame {
                 .map(NodeSpec::getVertex)
                 .collect(Collectors.toMap(Vertex::getId, Function.identity())));
         this.successors = Collections.unmodifiableMap(
-            nodeSpecs.stream()
-                .collect(Collectors.toMap(
-                    NodeSpec::getVertex,
-                    nodeSpec -> nodeSpec.getSuccessors().stream()
-                        .map(this.vertices::get)
-                        .collect(Collectors.toSet()))));
+                nodeSpecs.stream()
+                        .collect(Collectors.toMap(
+                                NodeSpec::getVertex,
+                                nodeSpec -> nodeSpec.getSuccessors().stream()
+                                        .map(this.vertices::get)
+                                        .collect(Collectors.toSet()))));
+        precessors = new HashMap<>();
+        for(Vertex v : vertices.values())
+            precessors.put(v, new HashSet<>());
+        for(Map.Entry<Vertex, Set<Vertex>> entry : successors.entrySet())
+        {
+            for(Vertex v : entry.getValue())
+            {
+                precessors.get(v).add(entry.getKey());
+            }
+        }
         if (this.successors.values()
                 .stream()
                 .map(Set::size)
@@ -96,5 +107,9 @@ public class ParityGame {
             ", priorities=" + this.priorities +
             ", maxPriority=" + this.maxPriority +
             '}';
+    }
+
+    public Map<Vertex,Set<Vertex>> getPrecessors() {
+        return precessors;
     }
 }

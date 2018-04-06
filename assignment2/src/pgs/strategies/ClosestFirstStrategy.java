@@ -7,7 +7,7 @@ import java.util.*;
 
 public class ClosestFirstStrategy extends InputLiftingStrategy {
     private final Map<Vertex, Integer> priority = new HashMap<>();
-    private Map<Vertex, Set<Vertex>> game_successors;
+    private Map<Vertex, Set<Vertex>> precessors;
 
 
     public ClosestFirstStrategy(ParityGame parityGame) {
@@ -15,20 +15,15 @@ public class ClosestFirstStrategy extends InputLiftingStrategy {
         for(Vertex v : getVertexOrder()){
             priority.put(v, 0);
         }
-        game_successors = parityGame.getSuccessors();
+        precessors = parityGame.getPrecessors();
     }
 
     public void didLift(Vertex v){
-        for(Vertex w : game_successors.get(v))
+        for(Vertex w : precessors.get(v))
         {
             priority.put(w, priority.get(w)+ 2);
         }
         priority.put(v, 0);
-        for(Vertex w : priority.keySet())
-        {
-            if(priority.get(w) == -1)
-                priority.put(w,0);
-        }
 
         Collections.sort(super.getVertexOrder(), new VertexPrioComparator());
         super.initializeIterator();
