@@ -29,10 +29,6 @@ public class StrictParser extends Parser {
 
         ParityGame parityGame = new ParityGame(new LinkedHashSet<>(nodeSpecs.values()));
 
-        if (parityGame.isTotal()) {
-            throw new ParseException("The parity game has no total edge relation", this);
-        }
-
         return parityGame;
     }
 
