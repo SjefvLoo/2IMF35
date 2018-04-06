@@ -16,8 +16,6 @@ public class SmallProgressMeasures {
     private int[] priorityCount;
     private int[] maxComponents;
     private Map<Vertex, Measure> varrho;
-    private Map<Vertex, Boolean> lifted;
-    private int liftedCount;
     private int liftingAttempts;
     private int lifts;
 
@@ -29,33 +27,39 @@ public class SmallProgressMeasures {
         reset(parityGame, liftingStrategy);
 
         // Algorithm (26/49)
-        while (this.isLiftable()) {
+        while (this.liftingStrategy.hasNext()) {
             // If this raises a NoSuchElementException, then there is a problem with the strategy.
             Vertex v = this.liftingStrategy.next();
+            if(liftVertexRepeatedly(v))
+            {
+                liftingStrategy.didLift(v);
+            } else {
+                liftingStrategy.didNotLift(v);
+            }
+        }
+
+        return this.buildResult();
+    }
+
+    private boolean liftVertexRepeatedly(Vertex v)
+    {
+        boolean liftedonce = false;
+        boolean didlift;
+        do {
             Measure vMeasure = this.varrho.get(v);
             Measure vLiftedMeasure = this.lift(v);
             this.liftingAttempts++;
 
             if (vMeasure.lt(vLiftedMeasure)) {
+                didlift = true;
                 this.varrho.put(v, vLiftedMeasure);
                 this.lifts ++ ;
-                if(liftingStrategy.isCircular()) {
-                    Boolean oldValue = this.lifted.put(v, false);
-                    if (oldValue != null && oldValue) {
-                        this.liftedCount--;
-                    }
-                } else {
-                    this.resetLifted();
-                }
+                liftedonce = true;
             } else {
-                Boolean oldValue = this.lifted.put(v, true);
-                if (oldValue != null && !oldValue) {
-                    this.liftedCount++;
-                }
+                didlift = false;
             }
-        }
-
-        return this.buildResult();
+        } while(didlift);
+        return liftedonce;
     }
 
     private void reset(ParityGame parityGame, LiftingStrategy liftingStrategy) {
@@ -79,26 +83,11 @@ public class SmallProgressMeasures {
             }
         }
 
-        this.lifted = this.parityGame.getVertices()
-            .values()
-            .stream()
-            .collect(Collectors.toMap(Function.identity(), k -> false));
-        this.liftedCount = 0;
-
 
         this.varrho = this.parityGame.getVertices()
             .values()
             .stream()
             .collect(Collectors.toMap(Function.identity(), v -> new Measure(new int[this.d])));
-    }
-
-    private void resetLifted() {
-        this.lifted.forEach((k, v) -> this.lifted.put(k, false));
-        this.liftedCount = 0;
-    }
-
-    private boolean isLiftable() {
-        return this.liftedCount < this.parityGame.getVertices().size();
     }
 
     private Measure lift(Vertex v) {

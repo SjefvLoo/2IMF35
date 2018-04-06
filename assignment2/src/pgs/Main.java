@@ -5,18 +5,12 @@ import pgs.models.ParityGameResult;
 import pgs.models.Vertex;
 import pgs.pgsolver.PGSolverBuilder;
 import pgs.pgsolver.SyntaxException;
-import pgs.strategies.InputLiftingStrategy;
-import pgs.strategies.LiftingStrategy;
-import pgs.strategies.RandomLiftingStrategy;
-import pgs.strategies.ShortestSelfCycleStrategy;
+import pgs.strategies.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -26,6 +20,7 @@ public class Main {
         INPUT,
         RANDOM,
         SSC,
+        DEGREE,
         ALL,
         ;
     }
@@ -49,15 +44,19 @@ public class Main {
                 liftingStrategies = Arrays.asList(new InputLiftingStrategy(parityGame));
                 break;
             case RANDOM:
-                liftingStrategies = Arrays.asList(new RandomLiftingStrategy(parityGame));
+                liftingStrategies = Arrays.asList(new RandomLiftingStrategy(parityGame, System.currentTimeMillis()));
                 break;
             case SSC:
                 liftingStrategies = Arrays.asList(new ShortestSelfCycleStrategy(parityGame));
                 break;
+            case DEGREE:
+                liftingStrategies = Arrays.asList(new ClosestFirstStrategy(parityGame));
+                break;
             case ALL:
                 liftingStrategies = Arrays.asList(new InputLiftingStrategy(parityGame),
-                new RandomLiftingStrategy(parityGame),
-                        new ShortestSelfCycleStrategy(parityGame));
+                new RandomLiftingStrategy(parityGame, System.currentTimeMillis()),
+                        new ShortestSelfCycleStrategy(parityGame),
+                        new ClosestFirstStrategy(parityGame));
                 break;
             default:
                 Main.help();
@@ -67,7 +66,7 @@ public class Main {
         Set<Vertex> gEven = null;
         Set<Vertex> gOdd = null;
         for(LiftingStrategy liftingStrategy : liftingStrategies) {
-            System.out.println("Using strategy: " + liftingStrategy.toString());
+            System.out.println("Using strategy: " + liftingStrategy.getClass().toString());
             SmallProgressMeasures smallProgressMeasures = new SmallProgressMeasures();
             ParityGameResult parityGameResult = smallProgressMeasures.calculate(parityGame, liftingStrategy);
 
