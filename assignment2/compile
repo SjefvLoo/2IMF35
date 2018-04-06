@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+javac -verbose -d ./out/production/ -sourcepath src src/pgs/Main.java "$@"
