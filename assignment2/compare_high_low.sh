@@ -21,4 +21,5 @@ then
 else
 	echo "nee"
 fi
-
+rm -f $tmphigh
+rm -f $tmplow
