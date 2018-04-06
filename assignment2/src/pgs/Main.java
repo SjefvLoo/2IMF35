@@ -13,7 +13,9 @@ import pgs.strategies.ShortestSelfCycleStrategy;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,6 +26,7 @@ public class Main {
         INPUT,
         RANDOM,
         SSC,
+        ALL,
         ;
     }
 
@@ -40,29 +43,51 @@ public class Main {
             return;
         }
         ParityGame parityGame = Main.loadPGSolver(args[1]);
-        LiftingStrategy liftingStrategy;
+        List<LiftingStrategy> liftingStrategies;
         switch (strategy) {
             case INPUT:
-                liftingStrategy = new InputLiftingStrategy(parityGame);
+                liftingStrategies = Arrays.asList(new InputLiftingStrategy(parityGame));
                 break;
             case RANDOM:
-                liftingStrategy = new RandomLiftingStrategy(parityGame);
+                liftingStrategies = Arrays.asList(new RandomLiftingStrategy(parityGame));
                 break;
             case SSC:
-                liftingStrategy = new ShortestSelfCycleStrategy(parityGame);
+                liftingStrategies = Arrays.asList(new ShortestSelfCycleStrategy(parityGame));
+                break;
+            case ALL:
+                liftingStrategies = Arrays.asList(new InputLiftingStrategy(parityGame),
+                new RandomLiftingStrategy(parityGame),
+                        new ShortestSelfCycleStrategy(parityGame));
                 break;
             default:
                 Main.help();
                 return;
         }
 
-        SmallProgressMeasures smallProgressMeasures = new SmallProgressMeasures();
-        ParityGameResult parityGameResult = smallProgressMeasures.calculate(parityGame, liftingStrategy);
+        Set<Vertex> gEven = null;
+        Set<Vertex> gOdd = null;
+        for(LiftingStrategy liftingStrategy : liftingStrategies) {
+            System.out.println("Using strategy: " + liftingStrategy.toString());
+            SmallProgressMeasures smallProgressMeasures = new SmallProgressMeasures();
+            ParityGameResult parityGameResult = smallProgressMeasures.calculate(parityGame, liftingStrategy);
 
-        System.out.println(String.format("Even: %s", Main.verticesToInts(parityGameResult.getEven())));
-        System.out.println(String.format("Odd: %s", Main.verticesToInts(parityGameResult.getOdd())));
-        System.out.println("Attempted lifts: " + smallProgressMeasures.getLiftingAttempts());
-        System.out.println("Actual lifts: " + smallProgressMeasures.getLifts());
+            Set<Vertex> even = parityGameResult.getEven();
+            Set<Vertex> odd = parityGameResult.getOdd();
+            System.out.println(String.format("Even: %s", Main.verticesToInts(even)));
+            System.out.println(String.format("Odd: %s", Main.verticesToInts(odd)));
+            if(gEven == null)
+            {
+                gEven = even;
+                gOdd = odd;
+            } else {
+                if (!(even.containsAll(gEven) && gEven.containsAll(even) && odd.containsAll(gOdd) && gOdd.containsAll(odd)))
+                {
+                    System.out.println("ERROR: Results not equal!!!");
+                }
+            }
+            System.out.println("Attempted lifts: " + smallProgressMeasures.getLiftingAttempts());
+            System.out.println("Actual lifts: " + smallProgressMeasures.getLifts());
+        }
     }
 
     private static Set<Integer> verticesToInts(Set<Vertex> vertices) {

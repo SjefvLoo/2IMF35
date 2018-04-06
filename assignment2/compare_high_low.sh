@@ -12,8 +12,8 @@ h1=`cat $tmphigh |head -1|tr ',' '\n'| sort -n|tr '\n' ','`
 h2=`cat $tmphigh |head -2 | tail -1|tr ',' '\n'| sort -n|tr '\n' ','`
 
 
-l1=`cat $tmplow |head -1|tr ',' '\n'| sort -n|tr '\n' ','`
-l2=`cat $tmplow |head -2|tail -1|tr ',' '\n'| sort -n|tr '\n' ','`
+l1=`cat $tmplow |head -2|tail -1|tr ',' '\n'| sort -n|tr '\n' ','`
+l2=`cat $tmplow |head -3|tail -1|tr ',' '\n'| sort -n|tr '\n' ','`
 
 if [ "$h1" == "$l1" ] && [ "$h2" == "$l2" ];
 then
